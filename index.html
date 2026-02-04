@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Poketiba – Shinydex Final Kanto</title>
+  <meta charset="UTF-8" />
+  <title>Poketiba – Shinydex Kanto</title>
 
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f2f2f2;
+      margin: 0;
       padding: 20px;
     }
 
@@ -23,7 +24,7 @@
     }
 
     .pokemon-card {
-      background: #fff;
+      background: white;
       border-radius: 10px;
       padding: 10px;
       text-align: center;
@@ -32,17 +33,19 @@
 
     .pokemon-card img {
       width: 96px;
+      height: 96px;
     }
 
     .pokemon-name {
       font-weight: bold;
       text-transform: capitalize;
+      margin-top: 5px;
     }
 
     .types {
       font-size: 12px;
-      color: #555;
       margin: 5px 0;
+      color: #555;
     }
 
     .stat {
@@ -54,73 +57,72 @@
 
 <body>
 
-<h1>✨ Poketiba – Shinydex Kanto (Últimas Evoluções)</h1>
+<h1>✨ Poketiba – Shinydex Kanto (Oficial)</h1>
 
 <div id="pokemon-container"></div>
 
 <script>
 /* ===============================
-   👉 SHINYS EDITÁVEIS AQUI 👈
+   👉 EDITE OS SHINYS AQUI 👈
    =============================== */
 
 const SHINYS = {
-  venusaur: 0,
-  charizard: 1,
-  blastoise: 0,
-  butterfree: 0,
-  beedrill: 0,
-  pidgeot: 0,
-  raticate: 0,
-  fearow: 0,
-  arbok: 0,
-  raichu: 0,
-  sandslash: 0,
-  nidoqueen: 0,
-  nidoking: 0,
-  clefable: 0,
-  ninetales: 0,
-  wigglytuff: 0,
-  golbat: 0,
-  vileplume: 0,
-  parasect: 0,
-  venomoth: 0,
-  dugtrio: 0,
-  persian: 0,
-  golduck: 0,
-  primeape: 0,
-  arcanine: 0,
-  poliwrath: 0,
-  alakazam: 0,
-  machamp: 0,
-  victreebel: 0,
-  tentacruel: 0,
-  golem: 0,
-  rapidash: 0,
-  slowbro: 0,
-  magneton: 0,
+  bulbasaur: 0, ivysaur: 0, venusaur: 0,
+  charmander: 0, charmeleon: 0, charizard: 1,
+  squirtle: 0, wartortle: 0, blastoise: 0,
+  caterpie: 0, metapod: 0, butterfree: 0,
+  weedle: 0, kakuna: 0, beedrill: 0,
+  pidgey: 0, pidgeotto: 0, pidgeot: 0,
+  rattata: 0, raticate: 0,
+  spearow: 0, fearow: 0,
+  ekans: 0, arbok: 0,
+  pikachu: 0, raichu: 0,
+  sandshrew: 0, sandslash: 0,
+  "nidoran-f": 0, nidorina: 0, nidoqueen: 0,
+  "nidoran-m": 0, nidorino: 0, nidoking: 0,
+  clefairy: 0, clefable: 0,
+  vulpix: 0, ninetales: 0,
+  jigglypuff: 0, wigglytuff: 0,
+  zubat: 0, golbat: 0,
+  oddish: 0, gloom: 0, vileplume: 0,
+  paras: 0, parasect: 0,
+  venonat: 0, venomoth: 0,
+  diglett: 0, dugtrio: 0,
+  meowth: 0, persian: 0,
+  psyduck: 0, golduck: 0,
+  mankey: 0, primeape: 0,
+  growlithe: 0, arcanine: 0,
+  poliwag: 0, poliwhirl: 0, poliwrath: 0,
+  abra: 0, kadabra: 0, alakazam: 0,
+  machop: 0, machoke: 0, machamp: 0,
+  bellsprout: 0, weepinbell: 0, victreebel: 0,
+  tentacool: 0, tentacruel: 0,
+  geodude: 0, graveler: 0, golem: 0,
+  ponyta: 0, rapidash: 0,
+  slowpoke: 0, slowbro: 0,
+  magnemite: 0, magneton: 0,
   farfetchd: 0,
-  dodrio: 0,
-  dewgong: 0,
-  muk: 0,
-  cloyster: 0,
-  gengar: 0,
+  doduo: 0, dodrio: 0,
+  seel: 0, dewgong: 0,
+  grimer: 0, muk: 0,
+  shellder: 0, cloyster: 0,
+  gastly: 0, haunter: 0, gengar: 0,
   onix: 0,
-  hypno: 0,
-  kingler: 0,
-  electrode: 0,
-  exeggutor: 0,
-  marowak: 0,
-  hitmonlee: 0,
-  hitmonchan: 0,
+  drowzee: 0, hypno: 0,
+  krabby: 0, kingler: 0,
+  voltorb: 0, electrode: 0,
+  exeggcute: 0, exeggutor: 0,
+  cubone: 0, marowak: 0,
+  hitmonlee: 0, hitmonchan: 0,
   lickitung: 0,
-  weezing: 0,
-  rhydon: 0,
+  koffing: 0, weezing: 0,
+  rhyhorn: 0, rhydon: 0,
   chansey: 0,
   tangela: 0,
   kangaskhan: 0,
-  seadra: 0,
-  seaking: 0,
-  starmie: 0,
+  horsea: 0, seadra: 0,
+  goldeen: 0, seaking: 0,
+  staryu: 0, starmie: 0,
   "mr-mime": 0,
   scyther: 0,
   jynx: 0,
@@ -128,30 +130,25 @@ const SHINYS = {
   magmar: 0,
   pinsir: 0,
   tauros: 0,
-  gyarados: 0,
+  magikarp: 0, gyarados: 0,
   lapras: 0,
   ditto: 0,
-  vaporeon: 0,
-  jolteon: 0,
-  flareon: 0,
+  eevee: 0, vaporeon: 0, jolteon: 0, flareon: 0,
   porygon: 0,
-  omastar: 0,
-  kabutops: 0,
+  omanyte: 0, omastar: 0,
+  kabuto: 0, kabutops: 0,
   aerodactyl: 1,
   snorlax: 0,
-  articuno: 0,
-  zapdos: 0,
-  moltres: 0,
-  dragonite: 0,
-  mewtwo: 0,
-  mew: 0
+  articuno: 0, zapdos: 0, moltres: 0,
+  dratini: 0, dragonair: 0, dragonite: 0,
+  mewtwo: 0, mew: 0
 };
 
 const container = document.getElementById("pokemon-container");
 
 async function loadPokemon() {
-  for (const name in SHINYS) {
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+  for (let i = 1; i <= 151; i++) {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
     const data = await res.json();
 
     const card = document.createElement("div");
@@ -160,5 +157,31 @@ async function loadPokemon() {
     const img = document.createElement("img");
     img.src = data.sprites.front_default;
 
-    const title = document.createElement("div");
-    title.className =
+    const name = document.createElement("div");
+    name.className = "pokemon-name";
+    name.textContent = data.name;
+
+    const types = document.createElement("div");
+    types.className = "types";
+    types.textContent = data.types.map(t => t.type.name).join(" / ");
+
+    const shiny = SHINYS[data.name] ?? 0;
+
+    const shinyText = document.createElement("div");
+    shinyText.className = "stat";
+    shinyText.textContent = `✨ Shinys capturados: ${shiny}`;
+
+    card.appendChild(img);
+    card.appendChild(name);
+    card.appendChild(types);
+    card.appendChild(shinyText);
+
+    container.appendChild(card);
+  }
+}
+
+loadPokemon();
+</script>
+
+</body>
+</html>
