@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Pokeclt – Shinys, Megas & Especiais</title>
+<title>Pokeclt – Shinys & Megas</title>
 
 <style>
 body {
@@ -16,45 +16,35 @@ h1 {
   text-align: center;
 }
 
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin: 20px 0;
-  flex-wrap: wrap;
-}
-
 button {
-  padding: 16px 32px;
-  font-size: 20px;
+  display: block;
+  margin: 20px auto;
+  padding: 14px 30px;
+  font-size: 18px;
   cursor: pointer;
-  border-radius: 12px;
-  border: none;
-  background: #ffcc00;
-  font-weight: bold;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
 }
 
 .card {
   background: white;
-  border-radius: 14px;
-  padding: 14px;
+  border-radius: 12px;
+  padding: 10px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
 }
 
 .card img {
-  width: 150px;
+  width: 120px;
 }
 
 .name {
   font-weight: bold;
-  margin-top: 6px;
+  margin-top: 5px;
 }
 
 .stat {
@@ -70,44 +60,110 @@ button {
 
 <body>
 
-<h1>✨ Pokeclt – Shinys, Megas & Especiais</h1>
+<h1>✨ Pokeclt – Shinys & Megas</h1>
 
-<div class="buttons">
-  <button onclick="showTab('shinys')">✨ Shinys</button>
-  <button onclick="showTab('megas')">💥 Megas</button>
-  <button onclick="showTab('special')">🔮 Especiais</button>
-</div>
+<button onclick="toggle()">Shinys 🔁 Megas</button>
 
 <div id="shinys" class="grid"></div>
 <div id="megas" class="grid hidden"></div>
-<div id="special" class="grid hidden"></div>
 
 <script>
-/* ========= SHINYS ========= */
+/* ======================
+   👉 EDITE OS SHINYS 👈
+   ====================== */
 const SHINYS = {
+  venusaur: 0,
   charizard: 1,
+  blastoise: 0,
+  butterfree: 0,
+  beedrill: 0,
+  pidgeot: 0,
+  raichu: 0,
+  sandslash: 0,
+  nidoqueen: 0,
+  nidoking: 0,
+  clefable: 0,
+  ninetales: 0,
+  wigglytuff: 0,
+  vileplume: 0,
+  dugtrio: 0,
+  persian: 0,
+  golduck: 0,
+  primeape: 0,
+  arcanine: 0,
+  poliwrath: 0,
+  alakazam: 0,
+  machamp: 0,
+  victreebel: 0,
+  tentacruel: 0,
+  golem: 0,
+  rapidash: 0,
+  slowbro: 0,
+  magneton: 0,
+  dodrio: 0,
+  dewgong: 0,
+  muk: 0,
+  cloyster: 0,
+  gengar: 0,
+  hypno: 0,
+  kingler: 0,
+  electrode: 0,
+  exeggutor: 0,
+  marowak: 0,
+  weezing: 0,
+  rhydon: 0,
+  chansey: 0,
+  tangela: 0,
+  kangaskhan: 0,
+  seadra: 0,
+  seaking: 0,
+  starmie: 0,
+  "mr-mime": 0,
+  scyther: 0,
+  jynx: 0,
+  electabuzz: 0,
+  magmar: 0,
+  pinsir: 0,
+  tauros: 0,
+  gyarados: 0,
+  lapras: 0,
+  ditto: 0,
+  vaporeon: 0,
+  jolteon: 0,
+  flareon: 0,
+  porygon: 0,
+  omastar: 0,
+  kabutops: 0,
   aerodactyl: 1,
-  "mr-mime": 0
+  snorlax: 0,
+  articuno: 0,
+  zapdos: 0,
+  moltres: 0,
+  dragonite: 0,
+  mewtwo: 0,
+  mew: 0
 };
 
-/* ========= MEGAS ========= */
+/* ======================
+   👉 EDITE OS MEGAS 👈
+   ====================== */
 const MEGAS = {
-  charizardX: {
-    nome: "Mega Charizard X",
-    img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",
-    player: "Rafael"
-  }
+  "charizard-mega-x": { nome: "Mega Charizard X", player: "Rafael" },
+  "alakazam-mega": { nome: "Mega Alakazam", player: "" },
+  "gengar-mega": { nome: "Mega Gengar", player: "" },
+  "gyarados-mega": { nome: "Mega Gyarados", player: "" },
+  "kangaskhan-mega": { nome: "Mega Kangaskhan", player: "" },
+  "pinsir-mega": { nome: "Mega Pinsir", player: "" },
+  "pidgeot-mega": { nome: "Mega Pidgeot", player: "" },
+  "aerodactyl-mega": { nome: "Mega Aerodactyl", player: "" },
+  "venusaur-mega": { nome: "Mega Venusaur", player: "" },
+  "blastoise-mega": { nome: "Mega Blastoise", player: "" },
+  "beedrill-mega": { nome: "Mega Beedrill", player: "" }
 };
 
-/* ========= ESPECIAIS ========= */
-const SPECIALS = [
-  {
-    nome: "Crystal Onix",
-    img: "https://archives.bulbagarden.net/media/upload/7/7b/Crystal_Onix.png"
-  }
-];
-
-/* ========= RENDER SHINYS ========= */
+/* ======================
+   RENDER SHINYS
+   ====================== */
 const shinyDiv = document.getElementById("shinys");
 
 for (const pkm in SHINYS) {
@@ -119,7 +175,7 @@ for (const pkm in SHINYS) {
 
   const name = document.createElement("div");
   name.className = "name";
-  name.textContent = pkm === "mr-mime" ? "Mr. Mime" : pkm;
+  name.textContent = pkm.replace("-", " ");
 
   const stat = document.createElement("div");
   stat.className = "stat";
@@ -129,52 +185,36 @@ for (const pkm in SHINYS) {
   shinyDiv.appendChild(card);
 }
 
-/* ========= RENDER MEGAS ========= */
+/* ======================
+   RENDER MEGAS
+   ====================== */
 const megaDiv = document.getElementById("megas");
 
-for (const m in MEGAS) {
+for (const mega in MEGAS) {
   const card = document.createElement("div");
   card.className = "card";
 
   const img = document.createElement("img");
-  img.src = MEGAS[m].img;
+  img.src = `https://play.pokemonshowdown.com/sprites/ani/${mega}.gif`;
 
   const name = document.createElement("div");
   name.className = "name";
-  name.textContent = MEGAS[m].nome;
+  name.textContent = MEGAS[mega].nome;
 
   const player = document.createElement("div");
   player.className = "stat";
-  player.textContent = `👤 Player: ${MEGAS[m].player}`;
+  player.textContent = `👤 Player: ${MEGAS[mega].player || "-"}`;
 
   card.append(img, name, player);
   megaDiv.appendChild(card);
 }
 
-/* ========= RENDER ESPECIAIS ========= */
-const specialDiv = document.getElementById("special");
-
-SPECIALS.forEach(sp => {
-  const card = document.createElement("div");
-  card.className = "card";
-
-  const img = document.createElement("img");
-  img.src = sp.img;
-
-  const name = document.createElement("div");
-  name.className = "name";
-  name.textContent = sp.nome;
-
-  card.append(img, name);
-  specialDiv.appendChild(card);
-});
-
-/* ========= TOGGLE ========= */
-function showTab(tab) {
-  shinys.classList.add("hidden");
-  megas.classList.add("hidden");
-  special.classList.add("hidden");
-  document.getElementById(tab).classList.remove("hidden");
+/* ======================
+   TOGGLE
+   ====================== */
+function toggle() {
+  shinyDiv.classList.toggle("hidden");
+  megaDiv.classList.toggle("hidden");
 }
 </script>
 
