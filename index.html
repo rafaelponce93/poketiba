@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Poketiba – Kanto Dex</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#pokemon-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.pokemon-card {
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.pokemon-card img {
+    width: 96px;
+    height: 96px;
+}
+
+.pokemon-name {
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.types {
+    font-size: 12px;
+    margin: 5px 0;
+}
+
+label {
+    font-size: 12px;
+    display: block;
+    margin-top: 5px;
+}
+
+input {
+    width: 60px;
+    text-align: center;
+    padding: 5px;
+}
+</style>
+</head>
+<body>
+
+<h1>✨ Poketiba – Shinydex Kanto</h1>
+
+<div id="pokemon-container"></div>
+
+<script>
+const container = document.getElementById("pokemon-container");
+
+// Pokémon que possuem Mega
+const megaPokemon = [
+    "beedrill",
+    "charizard",
+    "blastoise",
+    "venusaur",
+    "aerodactyl",
+    "kangaskhan",
+    "pidgeot",
+    "alakazam",
+    "gengar",
+    "gyarados",
+    "pinsir"
+];
+
+async function loadPokemon() {
+    for (let i = 1; i <= 151; i++) {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
+        const data = await response.json();
+
+        const card = document.createElement("div");
+        card.className = "pokemon-card";
+
+        const img = document.createElement("img");
+        img.src = data.sprites.front_default;
+
+        const name = document.createElement("div");
+        name.className = "pokemon-name";
+        name.textContent = data.name;
+
+        const types = document.createElement("div");
+        types.className = "types";
+        types.textContent = data.types.map(t => t.type.name).join(" / ");
+
+        // Shinys capturados
+        const shinyLabel = document.createElement("label");
+        shinyLabel.textContent = "Shinys capturados:";
+
+        const shinyInput = document.createElement("input");
+        shinyInput.type = "number";
+        shinyInput.min = 0;
+
+        const shinySaved = localStorage.getItem(`pokemon-${data.id}-shiny`);
+        if (shinySaved !== null) shinyInput.value = shinySaved;
+
+        shinyInput.addEventListener("change", () => {
+            localStorage.setItem(`pokemon-${data.id}-shiny`, shinyInput.value);
+        });
+
+        card.appendChild(img);
+        card.appendChild(name);
+        card.appendChild(types);
+        card.appendChild(shinyLabel);
+        card.appendChild(shinyInput);
+
+        // Megas feitos (apenas para alguns Pokémon)
+        if (megaPokemon.includes(data.name)) {
+            const megaLabel = document.createElement("label");
+            megaLabel.textContent = "Megas feitos:";
+
+            const megaInput = document.createElement("input");
+            megaInput.type = "number";
+            megaInput.min = 0;
+
+            const megaSaved = localStorage.getItem(`pokemon-${data.id}-mega`);
+            if (megaSaved !== null) megaInput.value = megaSaved;
+
+            megaInput.addEventListener("change", () => {
+                localStorage.setItem(`pokemon-${data.id}-mega`, megaInput.value);
+            });
+
+            card.appendChild(megaLabel);
+            card.appendChild(megaInput);
+        }
+
+        container.appendChild(card);
+    }
+}
+
+loadPokemon();
+</script>
+
+</body>
+</html>
