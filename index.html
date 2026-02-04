@@ -72,9 +72,7 @@ button {
 <script>
 let view = 0;
 
-/* ======================
-   👉 SHINYS (EDITÁVEL)
-   ====================== */
+/* ===== SHINYS ===== */
 const SHINYS = {
   venusaur: 0,
   charizard: 1,
@@ -148,9 +146,7 @@ const SHINYS = {
   mew: 0
 };
 
-/* ======================
-   👉 MEGAS (CORRIGIDOS)
-   ====================== */
+/* ===== MEGAS ===== */
 const MEGAS = {
   "charizard-megax": { nome: "Mega Charizard X", player: "Rafael" },
   "alakazam-mega": { nome: "Mega Alakazam", player: "" },
@@ -165,20 +161,16 @@ const MEGAS = {
   "beedrill-mega": { nome: "Mega Beedrill", player: "" }
 };
 
-/* ======================
-   👉 ESPECIAIS
-   ====================== */
+/* ===== ESPECIAIS ===== */
 const ESPECIAIS = [
   {
     nome: "Crystal Onix",
-    img: "https://archives.bulbagarden.net/media/upload/7/7b/Crystal_Onix.png",
+    img: "https://wiki.pokexgames.com/images/CrystalOnix.gif",
     descricao: "Onix especial feito de cristal"
   }
 ];
 
-/* ======================
-   RENDER SHINYS
-   ====================== */
+/* RENDER SHINYS */
 const shinyDiv = document.getElementById("shinys");
 for (const pkm in SHINYS) {
   shinyDiv.innerHTML += `
@@ -190,9 +182,7 @@ for (const pkm in SHINYS) {
   `;
 }
 
-/* ======================
-   RENDER MEGAS
-   ====================== */
+/* RENDER MEGAS */
 const megaDiv = document.getElementById("megas");
 for (const mega in MEGAS) {
   megaDiv.innerHTML += `
@@ -204,9 +194,7 @@ for (const mega in MEGAS) {
   `;
 }
 
-/* ======================
-   RENDER ESPECIAIS
-   ====================== */
+/* RENDER ESPECIAIS */
 const especiaisDiv = document.getElementById("especiais");
 ESPECIAIS.forEach(p => {
   especiaisDiv.innerHTML += `
@@ -218,14 +206,12 @@ ESPECIAIS.forEach(p => {
   `;
 });
 
-/* ======================
-   TOGGLE
-   ====================== */
+/* TOGGLE */
 function toggle() {
   view = (view + 1) % 3;
-  shinyDiv.classList.toggle("hidden", view !== 0);
-  megaDiv.classList.toggle("hidden", view !== 1);
-  especiaisDiv.classList.toggle("hidden", view !== 2);
+  document.getElementById("shinys").classList.toggle("hidden", view !== 0);
+  document.getElementById("megas").classList.toggle("hidden", view !== 1);
+  document.getElementById("especiais").classList.toggle("hidden", view !== 2);
 }
 </script>
 
