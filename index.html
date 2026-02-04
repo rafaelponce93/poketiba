@@ -8,7 +8,6 @@
 :root {
   --accent: #facc15;
   --mega: #7c3aed;
-  --special: #0ea5e9;
 }
 
 body {
@@ -17,6 +16,7 @@ body {
   background: #e5e7eb;
 }
 
+/* HEADER */
 header {
   background: linear-gradient(135deg, #020617, #0f172a);
   color: white;
@@ -34,6 +34,7 @@ header p {
   color: #cbd5f5;
 }
 
+/* CONTADORES */
 .counters {
   display: flex;
   justify-content: center;
@@ -50,6 +51,7 @@ header p {
   font-weight: bold;
 }
 
+/* CONTROLES */
 .controls {
   display: flex;
   flex-direction: column;
@@ -74,6 +76,7 @@ button {
   cursor: pointer;
 }
 
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -81,6 +84,7 @@ button {
   padding: 20px;
 }
 
+/* CARD */
 .card {
   background: white;
   border-radius: 18px;
@@ -114,10 +118,6 @@ button {
   border: 3px solid var(--mega);
 }
 
-.special {
-  border: 3px solid var(--special);
-}
-
 .hidden {
   display: none;
 }
@@ -139,15 +139,13 @@ button {
 <div class="controls">
   <input type="text" id="search" placeholder="🔍 Buscar Pokémon...">
   <button onclick="toggle()">Shinys 🔁 Megas</button>
-  <button onclick="toggleEspeciais()">✨ Especiais</button>
 </div>
 
 <div id="shinys" class="grid"></div>
 <div id="megas" class="grid hidden"></div>
-<div id="especiais" class="grid hidden"></div>
 
 <script>
-/* ===== SHINYS (INALTERADO) ===== */
+/* ===== SHINYS ===== */
 const SHINYS = {
   venusaur: 0, charizard: 1, blastoise: 0, butterfree: 0, beedrill: 0,
   pidgeot: 0, raticate: 0, fearow: 0, arbok: 0, raichu: 0,
@@ -171,108 +169,9 @@ const SHINYS = {
   dragonite: 0, mewtwo: 0, mew: 0
 };
 
-/* ===== MEGAS (INALTERADO) ===== */
+/* ===== MEGAS ===== */
 const MEGAS = {
-  "charizard-megax": { nome: "Mega Charizard X", player: "Rafael" },
+  "charizard-mega-x": { nome: "Mega Charizard X", player: "Rafael" },
   "alakazam-mega": { nome: "Mega Alakazam", player: "" },
   "gengar-mega": { nome: "Mega Gengar", player: "" },
-  "gyarados-mega": { nome: "Mega Gyarados", player: "" },
-  "kangaskhan-mega": { nome: "Mega Kangaskhan", player: "" },
-  "pinsir-mega": { nome: "Mega Pinsir", player: "" },
-  "pidgeot-mega": { nome: "Mega Pidgeot", player: "" },
-  "aerodactyl-mega": { nome: "Mega Aerodactyl", player: "" },
-  "venusaur-mega": { nome: "Mega Venusaur", player: "" },
-  "blastoise-mega": { nome: "Mega Blastoise", player: "" },
-  "beedrill-mega": { nome: "Mega Beedrill", player: "" }
-};
-
-/* ===== ESPECIAIS ===== */
-const ESPECIAIS = {
-  crystalonyx: {
-    nome: "Crystal Onix",
-    player: "Rafael",
-    img: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjE2MCIgdmlld0JveD0iMCAwIDE2MCAxNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE2MCIgaGVpZ2h0PSIxNjAiIGZpbGw9IiMwZWE1ZTkiLz48cG9seWdvbiBwb2ludHM9IjgwLDEwIDExMCw2MCA4MCwxMTAgNTAsNjAiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii42Ii8+PHRleHQgeD0iODAiIHk9IjE0MCIgZm9udC1zaXplPSIxNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmZiI+Q3J5c3RhbCBPbml4PC90ZXh0Pjwvc3ZnPg=="
-  }
-};
-
-const shinyDiv = document.getElementById("shinys");
-const megaDiv = document.getElementById("megas");
-const especialDiv = document.getElementById("especiais");
-
-/* CONTADORES */
-document.getElementById("shinyCount").textContent =
-  `✨ Shinys: ${Object.values(SHINYS).filter(v => v > 0).length} / ${Object.keys(SHINYS).length}`;
-
-document.getElementById("megaCount").textContent =
-  `🧬 Megas: ${Object.keys(MEGAS).length}`;
-
-/* RENDER SHINYS */
-function renderShinys(filter="") {
-  shinyDiv.innerHTML = "";
-  for (const pkm in SHINYS) {
-    if (!pkm.includes(filter)) continue;
-    const card = document.createElement("div");
-    card.className = "card";
-    if (SHINYS[pkm] > 0) card.classList.add("shiny");
-
-    card.innerHTML = `
-      <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${pkm}.gif">
-      <div class="name">${pkm}</div>
-      <div class="stat">✨ Shinys capturados: ${SHINYS[pkm]}</div>
-    `;
-    shinyDiv.appendChild(card);
-  }
-}
-
-/* RENDER MEGAS */
-function renderMegas(filter="") {
-  megaDiv.innerHTML = "";
-  for (const m in MEGAS) {
-    if (!MEGAS[m].nome.toLowerCase().includes(filter)) continue;
-    const card = document.createElement("div");
-    card.className = "card mega";
-
-    card.innerHTML = `
-      <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
-      <div class="name">${MEGAS[m].nome}</div>
-      <div class="stat">👤 Player: ${MEGAS[m].player || "-"}</div>
-    `;
-    megaDiv.appendChild(card);
-  }
-}
-
-/* RENDER ESPECIAIS */
-function renderEspeciais() {
-  especialDiv.innerHTML = "";
-  for (const e in ESPECIAIS) {
-    const card = document.createElement("div");
-    card.className = "card special";
-
-    card.innerHTML = `
-      <img src="${ESPECIAIS[e].img}">
-      <div class="name">${ESPECIAIS[e].nome}</div>
-      <div class="stat">👤 Player: ${ESPECIAIS[e].player || "-"}</div>
-    `;
-    especialDiv.appendChild(card);
-  }
-}
-
-function toggle() {
-  shinyDiv.classList.toggle("hidden");
-  megaDiv.classList.toggle("hidden");
-  especialDiv.classList.add("hidden");
-}
-
-function toggleEspeciais() {
-  shinyDiv.classList.add("hidden");
-  megaDiv.classList.add("hidden");
-  especialDiv.classList.toggle("hidden");
-}
-
-renderShinys();
-renderMegas();
-renderEspeciais();
-</script>
-
-</body>
-</html>
+  "gyarados-mega": { nome: "Mega Gyarados
