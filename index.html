@@ -82,10 +82,6 @@
       box-shadow: 0 0 15px rgba(56,189,248,0.35);
     }
 
-    .card.captured {
-      outline: 3px solid gold;
-    }
-
     .card img {
       width: 96px;
     }
@@ -172,7 +168,6 @@
     <img id="modalImg">
     <h2 id="modalName"></h2>
     <p id="modalTypes"></p>
-    <button id="captureBtn">⭐ Marcar como capturado</button>
   </div>
 </div>
 
@@ -186,12 +181,10 @@
   const modalImg = document.getElementById("modalImg");
   const modalName = document.getElementById("modalName");
   const modalTypes = document.getElementById("modalTypes");
-  const captureBtn = document.getElementById("captureBtn");
   const closeModal = document.getElementById("closeModal");
 
   let shinyMode = false;
   let pokemons = [];
-  let captured = JSON.parse(localStorage.getItem("capturedPokemons")) || [];
 
   async function loadPokemons() {
     for (let i = 1; i <= 151; i++) {
@@ -214,7 +207,6 @@
     filtered.forEach(p => {
       const card = document.createElement("div");
       card.className = "card";
-      if (captured.includes(p.id)) card.classList.add("captured");
 
       const imgSrc = shinyMode
         ? p.sprites.front_shiny
@@ -241,17 +233,6 @@
     modalName.textContent = capitalize(pokemon.name);
     modalTypes.textContent =
       "Tipos: " + pokemon.types.map(t => t.type.name).join(", ");
-
-    captureBtn.onclick = () => {
-      if (!captured.includes(pokemon.id)) {
-        captured.push(pokemon.id);
-        localStorage.setItem(
-          "capturedPokemons",
-          JSON.stringify(captured)
-        );
-        render();
-      }
-    };
   }
 
   closeModal.onclick = () => modal.classList.add("hidden");
