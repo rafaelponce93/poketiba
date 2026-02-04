@@ -5,7 +5,6 @@
 <title>Pokeclt – Shinydex Kanto</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Shinydex e Megadex Kanto oficial do Pokeclt">
 
 <style>
 body {
@@ -22,8 +21,8 @@ h1 {
 
 #top-info {
   text-align: center;
-  margin-bottom: 15px;
   font-weight: bold;
+  margin-bottom: 15px;
 }
 
 #buttons {
@@ -81,7 +80,6 @@ button:not(.active) {
 
 .types {
   font-size: 12px;
-  margin: 5px 0;
   color: #555;
 }
 
@@ -95,7 +93,6 @@ button:not(.active) {
 <body>
 
 <h1>✨ Pokeclt – Kanto</h1>
-
 <div id="top-info"></div>
 
 <div id="buttons">
@@ -107,7 +104,7 @@ button:not(.active) {
 
 <script>
 /* ==================================================
-   👉 EDITE SOMENTE OS NÚMEROS AQUI 👈
+   👉 LISTA COMPLETA — EDITE OS NÚMEROS QUANDO QUISER
    ================================================== */
 
 const POKEMON_DATA = {
@@ -194,6 +191,21 @@ const POKEMON_DATA = {
   mew: { shiny: 0 }
 };
 
+/* ===== Sprites Mega ===== */
+const MEGA_SPRITES = {
+  venusaur: "https://play.pokemonshowdown.com/sprites/xyani/venusaur-mega.gif",
+  charizard: "https://play.pokemonshowdown.com/sprites/xyani/charizard-mega-x.gif",
+  blastoise: "https://play.pokemonshowdown.com/sprites/xyani/blastoise-mega.gif",
+  beedrill: "https://play.pokemonshowdown.com/sprites/xyani/beedrill-mega.gif",
+  pidgeot: "https://play.pokemonshowdown.com/sprites/xyani/pidgeot-mega.gif",
+  alakazam: "https://play.pokemonshowdown.com/sprites/xyani/alakazam-mega.gif",
+  gengar: "https://play.pokemonshowdown.com/sprites/xyani/gengar-mega.gif",
+  kangaskhan: "https://play.pokemonshowdown.com/sprites/xyani/kangaskhan-mega.gif",
+  pinsir: "https://play.pokemonshowdown.com/sprites/xyani/pinsir-mega.gif",
+  gyarados: "https://play.pokemonshowdown.com/sprites/xyani/gyarados-mega.gif",
+  aerodactyl: "https://play.pokemonshowdown.com/sprites/xyani/aerodactyl-mega.gif"
+};
+
 const container = document.getElementById("pokemon-container");
 const topInfo = document.getElementById("top-info");
 const btnShiny = document.getElementById("btn-shiny");
@@ -204,8 +216,8 @@ let mode = "shiny";
 btnShiny.onclick = () => switchMode("shiny");
 btnMega.onclick = () => switchMode("mega");
 
-function switchMode(newMode) {
-  mode = newMode;
+function switchMode(m) {
+  mode = m;
   btnShiny.classList.toggle("active", mode === "shiny");
   btnMega.classList.toggle("active", mode === "mega");
   render();
@@ -216,24 +228,23 @@ async function render() {
   let total = 0;
 
   for (const name in POKEMON_DATA) {
-    const dataApi = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`).then(r => r.json());
+    if (mode === "mega" && !MEGA_SPRITES[name]) continue;
+
+    const api = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`).then(r => r.json());
     const value = POKEMON_DATA[name][mode] ?? 0;
-
-    if (mode === "mega" && POKEMON_DATA[name].mega === undefined) continue;
-
     total += value;
+
+    const img = mode === "mega" ? MEGA_SPRITES[name] : api.sprites.front_default;
 
     const card = document.createElement("div");
     card.className = "pokemon-card";
     if (value > 0) card.classList.add("highlight");
 
     card.innerHTML = `
-      <img src="${dataApi.sprites.front_default}">
-      <div class="pokemon-name">${dataApi.name}</div>
-      <div class="types">${dataApi.types.map(t => t.type.name).join(" / ")}</div>
-      <div class="stat">
-        ${mode === "shiny" ? "✨ Shinys capturados" : "🧬 Megas feitos"}: ${value}
-      </div>
+      <img src="${img}">
+      <div class="pokemon-name">${api.name}</div>
+      <div class="types">${api.types.map(t => t.type.name).join(" / ")}</div>
+      <div class="stat">${mode === "shiny" ? "✨ Shinys" : "🧬 Megas"}: ${value}</div>
     `;
 
     container.appendChild(card);
