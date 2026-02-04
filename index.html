@@ -1,153 +1,180 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Poketiba — Shinydex Kanto</title>
+<meta charset="UTF-8">
+<title>Pokeclt – Shinydex Kanto</title>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: system-ui, Arial, sans-serif;
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  margin: 0;
+  padding: 20px;
+}
 
-    body {
-      background: linear-gradient(180deg, #0f172a, #020617);
-      color: #e5e7eb;
-      min-height: 100vh;
-    }
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-    header {
-      text-align: center;
-      padding: 1.5rem;
-    }
+#pokemon-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+}
 
-    header h1 {
-      font-size: 2.2rem;
-    }
+.pokemon-card {
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
 
-    header p {
-      opacity: 0.8;
-    }
+.pokemon-card img {
+  width: 96px;
+  height: 96px;
+}
 
-    #pokemonGrid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 16px;
-      padding: 20px;
-    }
+.pokemon-name {
+  font-weight: bold;
+  text-transform: capitalize;
+  margin-top: 5px;
+}
 
-    .card {
-      background: #020617;
-      border-radius: 14px;
-      padding: 14px 10px 10px;
-      text-align: center;
-      position: relative;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
+.types {
+  font-size: 12px;
+  margin: 5px 0;
+  color: #555;
+}
 
-    .card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(56,189,248,0.35);
-    }
-
-    .card img {
-      width: 96px;
-    }
-
-    .card strong {
-      display: block;
-      margin-top: 6px;
-    }
-
-    .slot {
-      position: absolute;
-      top: 6px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: gold;
-      color: #020617;
-      font-size: 0.7rem;
-      font-weight: bold;
-      padding: 3px 10px;
-      border-radius: 999px;
-      text-transform: uppercase;
-    }
-
-    .mega {
-      border: 2px solid #38bdf8;
-    }
-  </style>
+.stat {
+  font-size: 13px;
+  margin-top: 6px;
+}
+</style>
 </head>
 
 <body>
 
-<header>
-  <h1>Poketiba</h1>
-  <p>Shinydex da Região de Kanto</p>
-</header>
+<h1>✨ Pokeclt – Shinydex Kanto</h1>
 
-<main id="pokemonGrid"></main>
+<div id="pokemon-container"></div>
 
 <script>
-  const grid = document.getElementById("pokemonGrid");
+/* ==================================================
+   👉 EDITE TUDO AQUI (SHINYS E MEGAS) 👈
+   ================================================== */
 
-  /* LISTA DE MEGAS */
-  const megas = [
-    "venusaur",
-    "charizard",
-    "blastoise",
-    "aerodactyl",
-    "beedrill",
-    "pinsir",
-    "kangaskhan",
-    "gyarados",
-    "pidgeot",
-    "alakazam",
-    "gengar"
-  ];
+const POKEMON_DATA = {
+  venusaur: { shiny: 0, mega: 0 },
+  charizard: { shiny: 1, mega: 1 },
+  blastoise: { shiny: 0, mega: 0 },
+  butterfree: { shiny: 0 },
+  beedrill: { shiny: 0, mega: 0 },
+  pidgeot: { shiny: 0, mega: 0 },
+  raticate: { shiny: 0 },
+  fearow: { shiny: 0 },
+  arbok: { shiny: 0 },
+  raichu: { shiny: 0 },
+  sandslash: { shiny: 0 },
+  nidoqueen: { shiny: 0 },
+  nidoking: { shiny: 0 },
+  clefable: { shiny: 0 },
+  ninetales: { shiny: 0 },
+  wigglytuff: { shiny: 0 },
+  golbat: { shiny: 0 },
+  vileplume: { shiny: 0 },
+  parasect: { shiny: 0 },
+  venomoth: { shiny: 0 },
+  dugtrio: { shiny: 0 },
+  persian: { shiny: 0 },
+  golduck: { shiny: 0 },
+  primeape: { shiny: 0 },
+  arcanine: { shiny: 0 },
+  poliwrath: { shiny: 0 },
+  alakazam: { shiny: 0, mega: 0 },
+  machamp: { shiny: 0 },
+  victreebel: { shiny: 0 },
+  tentacruel: { shiny: 0 },
+  golem: { shiny: 0 },
+  rapidash: { shiny: 0 },
+  slowbro: { shiny: 0 },
+  magneton: { shiny: 0 },
+  farfetchd: { shiny: 0 },
+  dodrio: { shiny: 0 },
+  dewgong: { shiny: 0 },
+  muk: { shiny: 0 },
+  cloyster: { shiny: 0 },
+  gengar: { shiny: 0, mega: 0 },
+  onix: { shiny: 0 },
+  hypno: { shiny: 0 },
+  kingler: { shiny: 0 },
+  electrode: { shiny: 0 },
+  exeggutor: { shiny: 0 },
+  marowak: { shiny: 0 },
+  hitmonlee: { shiny: 0 },
+  hitmonchan: { shiny: 0 },
+  lickitung: { shiny: 0 },
+  weezing: { shiny: 0 },
+  rhydon: { shiny: 0 },
+  chansey: { shiny: 0 },
+  tangela: { shiny: 0 },
+  kangaskhan: { shiny: 0, mega: 0 },
+  seadra: { shiny: 0 },
+  seaking: { shiny: 0 },
+  starmie: { shiny: 0 },
+  "mr-mime": { shiny: 0 },
+  scyther: { shiny: 0 },
+  jynx: { shiny: 0 },
+  electabuzz: { shiny: 0 },
+  magmar: { shiny: 0 },
+  pinsir: { shiny: 0, mega: 0 },
+  tauros: { shiny: 0 },
+  gyarados: { shiny: 0, mega: 0 },
+  lapras: { shiny: 0 },
+  ditto: { shiny: 0 },
+  vaporeon: { shiny: 0 },
+  jolteon: { shiny: 0 },
+  flareon: { shiny: 0 },
+  porygon: { shiny: 0 },
+  omastar: { shiny: 0 },
+  kabutops: { shiny: 0 },
+  aerodactyl: { shiny: 1, mega: 1 },
+  snorlax: { shiny: 0 },
+  articuno: { shiny: 0 },
+  zapdos: { shiny: 0 },
+  moltres: { shiny: 0 },
+  dragonite: { shiny: 0 },
+  mewtwo: { shiny: 0 },
+  mew: { shiny: 0 }
+};
 
-  async function loadShinys() {
-    // Shinys da Pokédex Kanto
-    for (let i = 1; i <= 151; i++) {
-      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
-      const p = await res.json();
-      renderCard(p.name, p.sprites.front_shiny, false);
-    }
+const container = document.getElementById("pokemon-container");
 
-    // Megas
-    megas.forEach(name => {
-      renderCard(
-        `Mega ${capitalize(name)}`,
-        `https://img.pokemondb.net/sprites/home/shiny/${name}.png`,
-        true
-      );
-    });
-  }
+async function loadPokemon() {
+  for (const name in POKEMON_DATA) {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    const data = await res.json();
 
-  function renderCard(name, img, isMega) {
     const card = document.createElement("div");
-    card.className = "card" + (isMega ? " mega" : "");
+    card.className = "pokemon-card";
 
     card.innerHTML = `
-      <div class="slot">Capturados</div>
-      <img src="${img}" loading="lazy">
-      <strong>${capitalize(name)}</strong>
+      <img src="${data.sprites.front_default}">
+      <div class="pokemon-name">${data.name}</div>
+      <div class="types">${data.types.map(t => t.type.name).join(" / ")}</div>
+      <div class="stat">✨ Shinys capturados: ${POKEMON_DATA[name].shiny}</div>
+      ${POKEMON_DATA[name].mega !== undefined
+        ? `<div class="stat">🧬 Megas feitos: ${POKEMON_DATA[name].mega}</div>`
+        : ``}
     `;
 
-    grid.appendChild(card);
+    container.appendChild(card);
   }
+}
 
-  function capitalize(text) {
-    return text
-      .split(" ")
-      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(" ");
-  }
-
-  loadShinys();
+loadPokemon();
 </script>
 
 </body>
