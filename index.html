@@ -144,37 +144,91 @@ button {
 <div id="megas" class="grid hidden"></div>
 
 <script>
-/* ===== FUNÇÃO NOME BONITO ===== */
-function formatName(name) {
-  return name
-    .replace("mrmime", "Mr. Mime")
-    .replace("farfetchd", "Farfetch'd")
-    .replace(/-/g, " ")
-    .replace(/\b\w/g, l => l.toUpperCase());
-}
+/* =====================================================
+   🔧 ÁREA ADMIN – ATUALIZE SOMENTE OS NÚMEROS
+   NINGUÉM CONSEGUE ALTERAR ISSO PELA PÁGINA
+===================================================== */
 
-/* ===== SHINYS ===== */
 const SHINYS = {
-  venusaur: 0, charizard: 1, blastoise: 0, butterfree: 0, beedrill: 0,
-  pidgeot: 0, raticate: 0, fearow: 0, arbok: 0, raichu: 0,
-  sandslash: 0, nidoqueen: 0, nidoking: 0, clefable: 0,
-  ninetales: 0, wigglytuff: 0, golbat: 0, vileplume: 0,
-  parasect: 0, venomoth: 0, dugtrio: 0, persian: 0,
-  golduck: 0, primeape: 0, arcanine: 0, poliwrath: 0,
-  alakazam: 0, machamp: 0, victreebel: 0, tentacruel: 0,
-  golem: 0, rapidash: 0, slowbro: 0, magneton: 0,
-  farfetchd: 0, dodrio: 0, dewgong: 0, muk: 0,
-  cloyster: 0, gengar: 0, hypno: 0, kingler: 0,
-  electrode: 0, exeggutor: 0, marowak: 0, hitmonlee: 0,
-  hitmonchan: 0, weezing: 0, rhydon: 0, chansey: 0,
-  tangela: 0, kangaskhan: 0, seadra: 0, seaking: 0,
-  starmie: 0, mrmime: 0, scyther: 0, jynx: 0,
-  electabuzz: 0, magmar: 0, pinsir: 0, tauros: 0,
-  gyarados: 0, lapras: 0, ditto: 0, vaporeon: 0,
-  jolteon: 0, flareon: 0, porygon: 0, omastar: 0,
-  kabutops: 0, aerodactyl: 1, snorlax: 0,
-  articuno: 0, zapdos: 0, moltres: 0,
-  dragonite: 0, mewtwo: 0, mew: 0
+  venusaur: 0,
+  charizard: 1,
+  blastoise: 0,
+  butterfree: 0,
+  beedrill: 0,
+  pidgeot: 0,
+  raticate: 0,
+  fearow: 0,
+  arbok: 0,
+  raichu: 0,
+  sandslash: 0,
+  nidoqueen: 0,
+  nidoking: 0,
+  clefable: 0,
+  ninetales: 0,
+  wigglytuff: 0,
+  golbat: 0,
+  vileplume: 0,
+  parasect: 0,
+  venomoth: 0,
+  dugtrio: 0,
+  persian: 0,
+  golduck: 0,
+  primeape: 0,
+  arcanine: 0,
+  poliwrath: 0,
+  alakazam: 0,
+  machamp: 0,
+  victreebel: 0,
+  tentacruel: 0,
+  golem: 0,
+  rapidash: 0,
+  slowbro: 0,
+  magneton: 0,
+  farfetchd: 0,
+  dodrio: 0,
+  dewgong: 0,
+  muk: 0,
+  cloyster: 0,
+  gengar: 0,
+  hypno: 0,
+  kingler: 0,
+  electrode: 0,
+  exeggutor: 0,
+  marowak: 0,
+  hitmonlee: 0,
+  hitmonchan: 0,
+  weezing: 0,
+  rhydon: 0,
+  chansey: 0,
+  tangela: 0,
+  kangaskhan: 0,
+  seadra: 0,
+  seaking: 0,
+  starmie: 0,
+  mrmime: 0,
+  scyther: 0,
+  jynx: 0,
+  electabuzz: 0,
+  magmar: 0,
+  pinsir: 0,
+  tauros: 0,
+  gyarados: 0,
+  lapras: 0,
+  ditto: 0,
+  vaporeon: 0,
+  jolteon: 0,
+  flareon: 0,
+  porygon: 0,
+  omastar: 0,
+  kabutops: 0,
+  aerodactyl: 1,
+  snorlax: 0,
+  articuno: 0,
+  zapdos: 0,
+  moltres: 0,
+  dragonite: 0,
+  mewtwo: 0,
+  mew: 0
 };
 
 /* ===== MEGAS ===== */
@@ -192,15 +246,23 @@ const MEGAS = {
   "beedrill-mega": { nome: "Mega Beedrill", player: "" }
 };
 
+/* ===== UTIL ===== */
+function formatName(name) {
+  return name
+    .replace("mrmime", "Mr. Mime")
+    .replace("farfetchd", "Farfetch'd")
+    .replace(/\b\w/g, l => l.toUpperCase());
+}
+
 /* CONTADORES */
-const total = Object.keys(SHINYS).length;
-const capturados = Object.values(SHINYS).filter(v => v > 0).length;
-
-document.getElementById("shinyCount").textContent =
-  `✨ Shinys: ${capturados} / ${total} (${Math.floor(capturados / total * 100)}%)`;
-
-document.getElementById("megaCount").textContent =
-  `🧬 Megas: ${Object.keys(MEGAS).length}`;
+function updateCounters() {
+  const total = Object.keys(SHINYS).length;
+  const capturados = Object.values(SHINYS).filter(v => v > 0).length;
+  document.getElementById("shinyCount").textContent =
+    `✨ Shinys: ${capturados} / ${total} (${Math.floor(capturados / total * 100)}%)`;
+  document.getElementById("megaCount").textContent =
+    `🧬 Megas: ${Object.keys(MEGAS).length}`;
+}
 
 /* RENDER */
 const shinyDiv = document.getElementById("shinys");
@@ -209,7 +271,7 @@ const megaDiv = document.getElementById("megas");
 function renderShinys(filter="") {
   shinyDiv.innerHTML = "";
   for (const pkm in SHINYS) {
-    if (!pkm.toLowerCase().includes(filter)) continue;
+    if (!pkm.includes(filter)) continue;
 
     const card = document.createElement("div");
     card.className = "card";
@@ -218,7 +280,7 @@ function renderShinys(filter="") {
     card.innerHTML = `
       <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${pkm}.gif">
       <div class="name">${formatName(pkm)}</div>
-      <div class="stat">${SHINYS[pkm] > 0 ? "✅ Capturado" : "❌ Não capturado"}</div>
+      <div class="stat">✨ Capturados: ${SHINYS[pkm]}</div>
     `;
     shinyDiv.appendChild(card);
   }
@@ -231,7 +293,6 @@ function renderMegas(filter="") {
 
     const card = document.createElement("div");
     card.className = "card mega";
-
     card.innerHTML = `
       <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
       <div class="name">${MEGAS[m].nome}</div>
@@ -243,6 +304,7 @@ function renderMegas(filter="") {
 
 renderShinys();
 renderMegas();
+updateCounters();
 
 /* BUSCA */
 document.getElementById("search").addEventListener("input", e => {
