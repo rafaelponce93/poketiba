@@ -32,35 +32,6 @@
       opacity: 0.8;
     }
 
-    .controls {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-top: 1rem;
-      flex-wrap: wrap;
-    }
-
-    input, select, button {
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: none;
-    }
-
-    input, select {
-      min-width: 160px;
-    }
-
-    button {
-      cursor: pointer;
-      background: #38bdf8;
-      color: #020617;
-      font-weight: bold;
-    }
-
-    button:hover {
-      opacity: 0.85;
-    }
-
     #pokemonGrid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -91,7 +62,6 @@
       margin-top: 6px;
     }
 
-    /* SLOT CAPTURADOS */
     .slot {
       position: absolute;
       top: 6px;
@@ -105,6 +75,10 @@
       border-radius: 999px;
       text-transform: uppercase;
     }
+
+    .mega {
+      border: 2px solid #38bdf8;
+    }
   </style>
 </head>
 
@@ -113,94 +87,67 @@
 <header>
   <h1>Poketiba</h1>
   <p>Shinydex da Região de Kanto</p>
-
-  <div class="controls">
-    <input type="text" id="search" placeholder="Buscar Pokémon...">
-
-    <select id="typeFilter">
-      <option value="">Todos os tipos</option>
-      <option value="normal">Normal</option>
-      <option value="fire">Fire</option>
-      <option value="water">Water</option>
-      <option value="grass">Grass</option>
-      <option value="electric">Electric</option>
-      <option value="ice">Ice</option>
-      <option value="fighting">Fighting</option>
-      <option value="poison">Poison</option>
-      <option value="ground">Ground</option>
-      <option value="flying">Flying</option>
-      <option value="psychic">Psychic</option>
-      <option value="bug">Bug</option>
-      <option value="rock">Rock</option>
-      <option value="ghost">Ghost</option>
-      <option value="dragon">Dragon</option>
-    </select>
-
-    <button id="toggleShiny">✨ Shiny</button>
-  </div>
 </header>
 
 <main id="pokemonGrid"></main>
 
 <script>
   const grid = document.getElementById("pokemonGrid");
-  const search = document.getElementById("search");
-  const typeFilter = document.getElementById("typeFilter");
-  const toggleShiny = document.getElementById("toggleShiny");
 
-  let shinyMode = false;
-  let pokemons = [];
+  /* LISTA DE MEGAS */
+  const megas = [
+    "venusaur",
+    "charizard",
+    "blastoise",
+    "aerodactyl",
+    "beedrill",
+    "pinsir",
+    "kangaskhan",
+    "gyarados",
+    "pidgeot",
+    "alakazam",
+    "gengar"
+  ];
 
-  async function loadPokemons() {
+  async function loadShinys() {
+    // Shinys da Pokédex Kanto
     for (let i = 1; i <= 151; i++) {
       const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
-      const data = await res.json();
-      pokemons.push(data);
+      const p = await res.json();
+      renderCard(p.name, p.sprites.front_shiny, false);
     }
-    render();
-  }
 
-  function render() {
-    grid.innerHTML = "";
-
-    const filtered = pokemons.filter(p =>
-      p.name.includes(search.value.toLowerCase()) &&
-      (!typeFilter.value ||
-        p.types.some(t => t.type.name === typeFilter.value))
-    );
-
-    filtered.forEach(p => {
-      const card = document.createElement("div");
-      card.className = "card";
-
-      const imgSrc = shinyMode
-        ? p.sprites.front_shiny
-        : p.sprites.front_default;
-
-      card.innerHTML = `
-        ${shinyMode ? '<div class="slot">Capturados</div>' : ''}
-        <img src="${imgSrc}" loading="lazy">
-        <strong>${capitalize(p.name)}</strong>
-      `;
-
-      grid.appendChild(card);
+    // Megas
+    megas.forEach(name => {
+      renderCard(
+        `Mega ${capitalize(name)}`,
+        `https://img.pokemondb.net/sprites/home/shiny/${name}.png`,
+        true
+      );
     });
   }
 
-  search.oninput = render;
-  typeFilter.onchange = render;
+  function renderCard(name, img, isMega) {
+    const card = document.createElement("div");
+    card.className = "card" + (isMega ? " mega" : "");
 
-  toggleShiny.onclick = () => {
-    shinyMode = !shinyMode;
-    toggleShiny.textContent = shinyMode ? "🔁 Normal" : "✨ Shiny";
-    render();
-  };
+    card.innerHTML = `
+      <div class="slot">Capturados</div>
+      <img src="${img}" loading="lazy">
+      <strong>${capitalize(name)}</strong>
+    `;
 
-  function capitalize(text) {
-    return text.charAt(0).toUpperCase() + text.slice(1);
+    grid.appendChild(card);
   }
 
-  loadPokemons();
+  function capitalize(text) {
+    return text
+      .split(" ")
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+  }
+
+  loadShinys();
 </script>
 
 </body>
