@@ -19,32 +19,32 @@ h1 {
 button {
   display: block;
   margin: 20px auto;
-  padding: 14px 30px;
-  font-size: 18px;
+  padding: 16px 34px;
+  font-size: 20px;
   cursor: pointer;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 18px;
 }
 
 .card {
   background: white;
-  border-radius: 12px;
-  padding: 10px;
+  border-radius: 14px;
+  padding: 12px;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  box-shadow: 0 3px 8px rgba(0,0,0,.2);
 }
 
 .card img {
-  width: 120px;
+  width: 140px;
 }
 
 .name {
   font-weight: bold;
-  margin-top: 5px;
+  margin-top: 6px;
   text-transform: capitalize;
 }
 
@@ -73,7 +73,7 @@ button {
 let view = 0;
 
 /* ======================
-   👉 SHINYS (EDITÁVEL) 👈
+   👉 SHINYS (EDITÁVEL)
    ====================== */
 const SHINYS = {
   venusaur: 0,
@@ -149,10 +149,10 @@ const SHINYS = {
 };
 
 /* ======================
-   👉 MEGAS 👈
+   👉 MEGAS (CORRIGIDOS)
    ====================== */
 const MEGAS = {
-  "charizard-mega-x": { nome: "Mega Charizard X", player: "Rafael" },
+  "charizard-megax": { nome: "Mega Charizard X", player: "Rafael" },
   "alakazam-mega": { nome: "Mega Alakazam", player: "" },
   "gengar-mega": { nome: "Mega Gengar", player: "" },
   "gyarados-mega": { nome: "Mega Gyarados", player: "" },
@@ -166,7 +166,7 @@ const MEGAS = {
 };
 
 /* ======================
-   👉 ESPECIAIS 👈
+   👉 ESPECIAIS
    ====================== */
 const ESPECIAIS = [
   {
@@ -181,15 +181,13 @@ const ESPECIAIS = [
    ====================== */
 const shinyDiv = document.getElementById("shinys");
 for (const pkm in SHINYS) {
-  const card = document.createElement("div");
-  card.className = "card";
-
-  card.innerHTML = `
-    <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${pkm}.gif">
-    <div class="name">${pkm.replace("-", " ")}</div>
-    <div class="stat">✨ Shinys capturados: ${SHINYS[pkm]}</div>
+  shinyDiv.innerHTML += `
+    <div class="card">
+      <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${pkm}.gif">
+      <div class="name">${pkm.replace("-", " ")}</div>
+      <div class="stat">✨ Shinys capturados: ${SHINYS[pkm]}</div>
+    </div>
   `;
-  shinyDiv.appendChild(card);
 }
 
 /* ======================
@@ -197,15 +195,13 @@ for (const pkm in SHINYS) {
    ====================== */
 const megaDiv = document.getElementById("megas");
 for (const mega in MEGAS) {
-  const card = document.createElement("div");
-  card.className = "card";
-
-  card.innerHTML = `
-    <img src="https://play.pokemonshowdown.com/sprites/ani/${mega}.gif">
-    <div class="name">${MEGAS[mega].nome}</div>
-    <div class="stat">👤 Player: ${MEGAS[mega].player || "-"}</div>
+  megaDiv.innerHTML += `
+    <div class="card">
+      <img src="https://play.pokemonshowdown.com/sprites/ani/${mega}.gif">
+      <div class="name">${MEGAS[mega].nome}</div>
+      <div class="stat">👤 Player: ${MEGAS[mega].player || "-"}</div>
+    </div>
   `;
-  megaDiv.appendChild(card);
 }
 
 /* ======================
@@ -213,15 +209,13 @@ for (const mega in MEGAS) {
    ====================== */
 const especiaisDiv = document.getElementById("especiais");
 ESPECIAIS.forEach(p => {
-  const card = document.createElement("div");
-  card.className = "card";
-
-  card.innerHTML = `
-    <img src="${p.img}">
-    <div class="name">${p.nome}</div>
-    <div class="stat">${p.descricao}</div>
+  especiaisDiv.innerHTML += `
+    <div class="card">
+      <img src="${p.img}">
+      <div class="name">${p.nome}</div>
+      <div class="stat">${p.descricao}</div>
+    </div>
   `;
-  especiaisDiv.appendChild(card);
 });
 
 /* ======================
