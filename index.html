@@ -4,22 +4,31 @@
 <meta charset="UTF-8">
 <title>Pokeclt – Shinydex Kanto</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Shinydex Kanto oficial do Pokeclt">
+
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: #f2f2f2;
+  background: #fff7cc;
   margin: 0;
   padding: 20px;
 }
 
 h1 {
   text-align: center;
+  margin-bottom: 5px;
+}
+
+#total-shinys {
+  text-align: center;
+  font-weight: bold;
   margin-bottom: 20px;
 }
 
 #pokemon-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 15px;
 }
 
@@ -29,6 +38,11 @@ h1 {
   padding: 10px;
   text-align: center;
   box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.pokemon-card.shiny {
+  border: 2px solid gold;
+  background: #fffbe6;
 }
 
 .pokemon-card img {
@@ -58,12 +72,13 @@ h1 {
 <body>
 
 <h1>✨ Pokeclt – Shinydex Kanto</h1>
+<div id="total-shinys">Total de Shinys: 0</div>
 
 <div id="pokemon-container"></div>
 
 <script>
 /* ==================================================
-   👉 EDITE TUDO AQUI (SHINYS E MEGAS) 👈
+   👉 EDITE SOMENTE OS NÚMEROS AQUI 👈
    ================================================== */
 
 const POKEMON_DATA = {
@@ -151,20 +166,27 @@ const POKEMON_DATA = {
 };
 
 const container = document.getElementById("pokemon-container");
+const totalText = document.getElementById("total-shinys");
+
+let totalShinys = 0;
 
 async function loadPokemon() {
   for (const name in POKEMON_DATA) {
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
     const data = await res.json();
 
+    const shinyCount = POKEMON_DATA[name].shiny;
+    totalShinys += shinyCount;
+
     const card = document.createElement("div");
     card.className = "pokemon-card";
+    if (shinyCount > 0) card.classList.add("shiny");
 
     card.innerHTML = `
       <img src="${data.sprites.front_default}">
       <div class="pokemon-name">${data.name}</div>
       <div class="types">${data.types.map(t => t.type.name).join(" / ")}</div>
-      <div class="stat">✨ Shinys capturados: ${POKEMON_DATA[name].shiny}</div>
+      <div class="stat">✨ Shinys capturados: ${shinyCount}</div>
       ${POKEMON_DATA[name].mega !== undefined
         ? `<div class="stat">🧬 Megas feitos: ${POKEMON_DATA[name].mega}</div>`
         : ``}
@@ -172,6 +194,8 @@ async function loadPokemon() {
 
     container.appendChild(card);
   }
+
+  totalText.textContent = `Total de Shinys: ${totalShinys}`;
 }
 
 loadPokemon();
