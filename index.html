@@ -5,7 +5,7 @@
 <title>Pokeclt – Shinydex Kanto</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Shinydex Kanto oficial do Pokeclt">
+<meta name="description" content="Shinydex e Megadex Kanto oficial do Pokeclt">
 
 <style>
 body {
@@ -17,13 +17,36 @@ body {
 
 h1 {
   text-align: center;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
-#total-shinys {
+#top-info {
   text-align: center;
+  margin-bottom: 15px;
   font-weight: bold;
+}
+
+#buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
   margin-bottom: 20px;
+}
+
+button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.active {
+  background: gold;
+}
+
+button:not(.active) {
+  background: #ddd;
 }
 
 #pokemon-container {
@@ -40,7 +63,7 @@ h1 {
   box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 }
 
-.pokemon-card.shiny {
+.pokemon-card.highlight {
   border: 2px solid gold;
   background: #fffbe6;
 }
@@ -71,8 +94,14 @@ h1 {
 
 <body>
 
-<h1>✨ Pokeclt – Shinydex Kanto</h1>
-<div id="total-shinys">Total de Shinys: 0</div>
+<h1>✨ Pokeclt – Kanto</h1>
+
+<div id="top-info"></div>
+
+<div id="buttons">
+  <button id="btn-shiny" class="active">✨ Shinys</button>
+  <button id="btn-mega">🧬 Megas</button>
+</div>
 
 <div id="pokemon-container"></div>
 
@@ -166,39 +195,57 @@ const POKEMON_DATA = {
 };
 
 const container = document.getElementById("pokemon-container");
-const totalText = document.getElementById("total-shinys");
+const topInfo = document.getElementById("top-info");
+const btnShiny = document.getElementById("btn-shiny");
+const btnMega = document.getElementById("btn-mega");
 
-let totalShinys = 0;
+let mode = "shiny";
 
-async function loadPokemon() {
+btnShiny.onclick = () => switchMode("shiny");
+btnMega.onclick = () => switchMode("mega");
+
+function switchMode(newMode) {
+  mode = newMode;
+  btnShiny.classList.toggle("active", mode === "shiny");
+  btnMega.classList.toggle("active", mode === "mega");
+  render();
+}
+
+async function render() {
+  container.innerHTML = "";
+  let total = 0;
+
   for (const name in POKEMON_DATA) {
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-    const data = await res.json();
+    const dataApi = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`).then(r => r.json());
+    const value = POKEMON_DATA[name][mode] ?? 0;
 
-    const shinyCount = POKEMON_DATA[name].shiny;
-    totalShinys += shinyCount;
+    if (mode === "mega" && POKEMON_DATA[name].mega === undefined) continue;
+
+    total += value;
 
     const card = document.createElement("div");
     card.className = "pokemon-card";
-    if (shinyCount > 0) card.classList.add("shiny");
+    if (value > 0) card.classList.add("highlight");
 
     card.innerHTML = `
-      <img src="${data.sprites.front_default}">
-      <div class="pokemon-name">${data.name}</div>
-      <div class="types">${data.types.map(t => t.type.name).join(" / ")}</div>
-      <div class="stat">✨ Shinys capturados: ${shinyCount}</div>
-      ${POKEMON_DATA[name].mega !== undefined
-        ? `<div class="stat">🧬 Megas feitos: ${POKEMON_DATA[name].mega}</div>`
-        : ``}
+      <img src="${dataApi.sprites.front_default}">
+      <div class="pokemon-name">${dataApi.name}</div>
+      <div class="types">${dataApi.types.map(t => t.type.name).join(" / ")}</div>
+      <div class="stat">
+        ${mode === "shiny" ? "✨ Shinys capturados" : "🧬 Megas feitos"}: ${value}
+      </div>
     `;
 
     container.appendChild(card);
   }
 
-  totalText.textContent = `Total de Shinys: ${totalShinys}`;
+  topInfo.textContent =
+    mode === "shiny"
+      ? `✨ Total de Shinys: ${total}`
+      : `🧬 Total de Megas: ${total}`;
 }
 
-loadPokemon();
+render();
 </script>
 
 </body>
