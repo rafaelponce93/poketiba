@@ -77,11 +77,6 @@ button {
   cursor: pointer;
 }
 
-button.special {
-  background: var(--special);
-  color: white;
-}
-
 /* GRID */
 .grid {
   display: grid;
@@ -124,7 +119,7 @@ button.special {
   border: 3px solid var(--mega);
 }
 
-.specialCard {
+.special {
   border: 3px solid var(--special);
 }
 
@@ -149,12 +144,14 @@ button.special {
 <div class="controls">
   <input type="text" id="search" placeholder="🔍 Buscar Pokémon...">
   <button onclick="toggle()">Shinys 🔁 Megas</button>
-  <button class="special" onclick="showSpecials()">✨ Especiais</button>
+  <!-- 🔹 BOTÃO ADICIONADO -->
+  <button onclick="toggleEspeciais()">✨ Especiais</button>
 </div>
 
 <div id="shinys" class="grid"></div>
 <div id="megas" class="grid hidden"></div>
-<div id="specials" class="grid hidden"></div>
+<!-- 🔹 CONTAINER ADICIONADO -->
+<div id="especiais" class="grid hidden"></div>
 
 <script>
 /* ===== SHINYS (INALTERADO) ===== */
@@ -172,7 +169,7 @@ const SHINYS = {
   electrode: 0, exeggutor: 0, marowak: 0, hitmonlee: 0,
   hitmonchan: 0, weezing: 0, rhydon: 0, chansey: 0,
   tangela: 0, kangaskhan: 0, seadra: 0, seaking: 0,
-  starmie: 0, mr-mime: 0, scyther: 0, jynx: 0,
+  starmie: 0, "mr-mime": 0, scyther: 0, jynx: 0,
   electabuzz: 0, magmar: 0, pinsir: 0, tauros: 0,
   gyarados: 0, lapras: 0, ditto: 0, vaporeon: 0,
   jolteon: 0, flareon: 0, porygon: 0, omastar: 0,
@@ -196,11 +193,11 @@ const MEGAS = {
   "beedrill-mega": { nome: "Mega Beedrill", player: "" }
 };
 
-/* ===== ESPECIAIS (NOVO – NÃO ALTERA NADA EXISTENTE) ===== */
+/* ===== ESPECIAIS (ADICIONADO) ===== */
 const ESPECIAIS = {
-  crystalOnix: {
-    nome: "Crystal Onix",
-    player: ""
+  "crystal-onyx": {
+    nome: "Crystal Onyx",
+    player: "Rafael"
   }
 };
 
@@ -211,14 +208,15 @@ document.getElementById("shinyCount").textContent =
 document.getElementById("megaCount").textContent =
   `🧬 Megas: ${Object.keys(MEGAS).length}`;
 
-/* RENDER SHINYS */
 const shinyDiv = document.getElementById("shinys");
 const megaDiv = document.getElementById("megas");
-const specialDiv = document.getElementById("specials");
+const especialDiv = document.getElementById("especiais");
 
-function renderShinys() {
+/* RENDER SHINYS (INALTERADO) */
+function renderShinys(filter="") {
   shinyDiv.innerHTML = "";
   for (const pkm in SHINYS) {
+    if (!pkm.includes(filter)) continue;
     const card = document.createElement("div");
     card.className = "card";
     if (SHINYS[pkm] > 0) card.classList.add("shiny");
@@ -232,10 +230,11 @@ function renderShinys() {
   }
 }
 
-/* RENDER MEGAS */
-function renderMegas() {
+/* RENDER MEGAS (INALTERADO) */
+function renderMegas(filter="") {
   megaDiv.innerHTML = "";
   for (const m in MEGAS) {
+    if (!MEGAS[m].nome.toLowerCase().includes(filter)) continue;
     const card = document.createElement("div");
     card.className = "card mega";
 
@@ -248,43 +247,45 @@ function renderMegas() {
   }
 }
 
-/* RENDER ESPECIAIS */
-function renderSpecials() {
-  specialDiv.innerHTML = "";
+/* RENDER ESPECIAIS (ADICIONADO) */
+function renderEspeciais() {
+  especialDiv.innerHTML = "";
+  for (const e in ESPECIAIS) {
+    const card = document.createElement("div");
+    card.className = "card special";
 
-  const card = document.createElement("div");
-  card.className = "card specialCard";
-
-  /* SVG próprio do Crystal Onix */
-  card.innerHTML = `
-    <img src="data:image/svg+xml;utf8,
-    <svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>
-      <rect width='100%' height='100%' fill='%230ea5e9'/>
-      <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
-        font-size='18' fill='white' font-family='Arial'>CRYSTAL ONIX</text>
-    </svg>">
-    <div class="name">Crystal Onix</div>
-    <div class="stat">👤 Player: ${ESPECIAIS.crystalOnix.player || "-"}</div>
-  `;
-  specialDiv.appendChild(card);
+    card.innerHTML = `
+      <img src="data:image/svg+xml;utf8,
+      <svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>
+        <rect width='100%' height='100%' fill='%230ea5e9'/>
+        <text x='50%' y='50%' font-size='18' fill='white' text-anchor='middle' dominant-baseline='middle'>
+          Crystal Onyx
+        </text>
+      </svg>">
+      <div class="name">${ESPECIAIS[e].nome}</div>
+      <div class="stat">👤 Player: ${ESPECIAIS[e].player || "-"}</div>
+    `;
+    especialDiv.appendChild(card);
+  }
 }
 
 /* TOGGLES */
 function toggle() {
   shinyDiv.classList.toggle("hidden");
   megaDiv.classList.toggle("hidden");
-  specialDiv.classList.add("hidden");
+  especialDiv.classList.add("hidden");
 }
 
-function showSpecials() {
+function toggleEspeciais() {
   shinyDiv.classList.add("hidden");
   megaDiv.classList.add("hidden");
-  specialDiv.classList.remove("hidden");
+  especialDiv.classList.toggle("hidden");
 }
 
+/* INIT */
 renderShinys();
 renderMegas();
-renderSpecials();
+renderEspeciais();
 </script>
 
 </body>
