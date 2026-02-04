@@ -1,2 +1,2 @@
-# poketiba
+# POKEDEX
 ShinyDex e Megas – Kanto
