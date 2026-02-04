@@ -1,214 +1,275 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Pokeclt – Shinydex Kanto</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poketiba — Shinydex Kanto</title>
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f2f2f2;
-  margin: 0;
-  padding: 20px;
-}
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, Arial, sans-serif;
+    }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
+    body {
+      background: linear-gradient(180deg, #0f172a, #020617);
+      color: #e5e7eb;
+      min-height: 100vh;
+    }
 
-#pokemon-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 15px;
-}
+    header {
+      text-align: center;
+      padding: 1.5rem;
+    }
 
-.pokemon-card {
-  background: white;
-  border-radius: 10px;
-  padding: 10px;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-}
+    header h1 {
+      font-size: 2.2rem;
+    }
 
-.pokemon-card img {
-  width: 96px;
-  height: 96px;
-}
+    header p {
+      opacity: 0.8;
+    }
 
-.pokemon-name {
-  font-weight: bold;
-  text-transform: capitalize;
-  margin-top: 5px;
-}
+    .controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
 
-.types {
-  font-size: 12px;
-  margin: 5px 0;
-  color: #555;
-}
+    input, select, button {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+    }
 
-.stat {
-  font-size: 13px;
-  margin-top: 6px;
-}
-</style>
+    input, select {
+      min-width: 160px;
+    }
+
+    button {
+      cursor: pointer;
+      background: #38bdf8;
+      color: #020617;
+      font-weight: bold;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+
+    #pokemonGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 16px;
+      padding: 20px;
+    }
+
+    .card {
+      background: #020617;
+      border-radius: 14px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(56,189,248,0.35);
+    }
+
+    .card.captured {
+      outline: 3px solid gold;
+    }
+
+    .card img {
+      width: 96px;
+    }
+
+    .card p {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    #modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .modal-content {
+      background: #020617;
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      width: 280px;
+      position: relative;
+    }
+
+    .modal-content img {
+      width: 120px;
+    }
+
+    #closeModal {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+  </style>
 </head>
 
 <body>
 
-<h1>✨ Pokeclt – Shinydex Kanto (Últimas Evoluções)</h1>
+<header>
+  <h1>Poketiba</h1>
+  <p>Shinydex da Região de Kanto</p>
 
-<div id="pokemon-container"></div>
+  <div class="controls">
+    <input type="text" id="search" placeholder="Buscar Pokémon...">
+
+    <select id="typeFilter">
+      <option value="">Todos os tipos</option>
+      <option value="normal">Normal</option>
+      <option value="fire">Fire</option>
+      <option value="water">Water</option>
+      <option value="grass">Grass</option>
+      <option value="electric">Electric</option>
+      <option value="ice">Ice</option>
+      <option value="fighting">Fighting</option>
+      <option value="poison">Poison</option>
+      <option value="ground">Ground</option>
+      <option value="flying">Flying</option>
+      <option value="psychic">Psychic</option>
+      <option value="bug">Bug</option>
+      <option value="rock">Rock</option>
+      <option value="ghost">Ghost</option>
+      <option value="dragon">Dragon</option>
+    </select>
+
+    <button id="toggleShiny">✨ Shiny</button>
+  </div>
+</header>
+
+<main id="pokemonGrid"></main>
+
+<div id="modal" class="hidden">
+  <div class="modal-content">
+    <span id="closeModal">✖</span>
+    <img id="modalImg">
+    <h2 id="modalName"></h2>
+    <p id="modalTypes"></p>
+    <button id="captureBtn">⭐ Marcar como capturado</button>
+  </div>
+</div>
 
 <script>
-// ==================================================
-// 👉 ÚLTIMAS EVOLUÇÕES DE KANTO
-// ==================================================
-const ULTIMAS_EVOLUCOES = [
-  "venusaur","charizard","blastoise","butterfree","beedrill","pidgeot",
-  "raticate","fearow","arbok","raichu","sandslash","nidoqueen","nidoking",
-  "clefable","ninetales","wigglytuff","golbat","vileplume","parasect",
-  "venomoth","dugtrio","persian","golduck","primeape","arcanine",
-  "poliwrath","alakazam","machamp","victreebel","tentacruel","golem",
-  "rapidash","slowbro","magneton","farfetchd","dodrio","dewgong","muk",
-  "cloyster","gengar","onix","hypno","kingler","electrode","exeggutor",
-  "marowak","hitmonlee","hitmonchan","lickitung","weezing","rhydon",
-  "chansey","tangela","kangaskhan","seadra","seaking","starmie","mr-mime",
-  "scyther","jynx","electabuzz","magmar","pinsir","tauros","gyarados",
-  "lapras","ditto","vaporeon","jolteon","flareon","porygon","omastar",
-  "kabutops","aerodactyl","snorlax","articuno","zapdos","moltres",
-  "dragonite","mewtwo","mew"
-];
+  const grid = document.getElementById("pokemonGrid");
+  const search = document.getElementById("search");
+  const typeFilter = document.getElementById("typeFilter");
+  const toggleShiny = document.getElementById("toggleShiny");
 
-// ==================================================
-// 👉 SHINYS (EDITÁVEL)
-// ==================================================
-const SHINYS = {
-  venusaur: 4,
-  charizard: 11,
-  blastoise: 5,
-  butterfree: 0,
-  beedrill: 0,
-  pidgeot: 17,
-  raticate: 0,
-  fearow: 0,
-  arbok: 0,
-  raichu: 3,
-  sandslash: 2,
-  nidoqueen: 0,
-  nidoking: 0,
-  clefable: 1,
-  ninetales: 0,
-  wigglytuff: 1,
-  golbat: 0,
-  vileplume: 2,
-  parasect: 0,
-  venomoth: 0,
-  dugtrio: 0,
-  persian: 0,
-  golduck: 0,
-  primeape: 0,
-  arcanine: 0,
-  poliwrath: 4,
-  alakazam: 12,
-  machamp: 8,
-  victreebel: 4,
-  tentacruel: 0,
-  golem: 10,
-  rapidash: 0,
-  slowbro: 0,
-  magneton: 1,
-  farfetchd: 1,
-  dodrio: 0,
-  dewgong: 0,
-  muk: 0,
-  cloyster: 0,
-  gengar: 9,
-  onix: 0,
-  hypno: 0,
-  kingler: 0,
-  electrode: 0,
-  exeggutor: 1,
-  marowak: 2,
-  hitmonlee: 1,
-  hitmonchan: 0,
-  lickitung: 0,
-  weezing: 0,
-  rhydon: 7,
-  chansey: 1,
-  tangela: 0,
-  kangaskhan: 0,
-  seadra: 0,
-  seaking: 0,
-  starmie: 0,
-  "mr-mime": 0,
-  scyther: 4,
-  jynx: 10,
-  electabuzz: 11,
-  magmar: 9,
-  pinsir: 3,
-  tauros: 0,
-  gyarados: 13,
-  lapras: 1,
-  ditto: 5,
-  vaporeon: 2,
-  jolteon: 1,
-  flareon: 0,
-  porygon: 0,
-  omastar: 0,
-  kabutops: 1,
-  aerodactyl: 2,
-  snorlax: 5,
-  articuno: 0,
-  zapdos: 0,
-  moltres: 0,
-  dragonite: 10,
-};
+  const modal = document.getElementById("modal");
+  const modalImg = document.getElementById("modalImg");
+  const modalName = document.getElementById("modalName");
+  const modalTypes = document.getElementById("modalTypes");
+  const captureBtn = document.getElementById("captureBtn");
+  const closeModal = document.getElementById("closeModal");
 
-// ==================================================
-// 👉 MEGAS FEITOS (EDITÁVEL)
-// ==================================================
-const MEGAS = {
-  charizard: 2,
-  blastoise: 1,
-  venusaur: 1,
-  beedrill: 0,
-  aerodactyl: 2,
-  kangaskhan: 0,
-  pidgeot: 1,
-  alakazam: 1,
-  gengar: 2,
-  gyarados: 2,
-  pinsir: 1,
-};
+  let shinyMode = false;
+  let pokemons = [];
+  let captured = JSON.parse(localStorage.getItem("capturedPokemons")) || [];
 
-const container = document.getElementById("pokemon-container");
-
-async function loadPokemon() {
-  for (const name of ULTIMAS_EVOLUCOES) {
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-    const data = await res.json();
-
-    const shiny = SHINYS[name] ?? 0;
-    const mega = MEGAS[name];
-
-    const card = document.createElement("div");
-    card.className = "pokemon-card";
-
-    card.innerHTML = `
-      <img src="${data.sprites.front_default}">
-      <div class="pokemon-name">${data.name}</div>
-      <div class="types">${data.types.map(t => t.type.name).join(" / ")}</div>
-      <div class="stat">✨ Shinys capturados: ${shiny}</div>
-      ${mega !== undefined ? `<div class="stat">🧬 Megas feitos: ${mega}</div>` : ""}
-    `;
-
-    container.appendChild(card);
+  async function loadPokemons() {
+    for (let i = 1; i <= 151; i++) {
+      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
+      const data = await res.json();
+      pokemons.push(data);
+    }
+    render();
   }
-}
 
-loadPokemon();
+  function render() {
+    grid.innerHTML = "";
+
+    const filtered = pokemons.filter(p =>
+      p.name.includes(search.value.toLowerCase()) &&
+      (!typeFilter.value ||
+        p.types.some(t => t.type.name === typeFilter.value))
+    );
+
+    filtered.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "card";
+      if (captured.includes(p.id)) card.classList.add("captured");
+
+      const imgSrc = shinyMode
+        ? p.sprites.front_shiny
+        : p.sprites.front_default;
+
+      card.innerHTML = `
+        <img src="${imgSrc}" loading="lazy">
+        <p>#${p.id}</p>
+        <strong>${capitalize(p.name)}</strong>
+      `;
+
+      card.onclick = () => openModal(p);
+      grid.appendChild(card);
+    });
+  }
+
+  function openModal(pokemon) {
+    modal.classList.remove("hidden");
+
+    modalImg.src = shinyMode
+      ? pokemon.sprites.front_shiny
+      : pokemon.sprites.front_default;
+
+    modalName.textContent = capitalize(pokemon.name);
+    modalTypes.textContent =
+      "Tipos: " + pokemon.types.map(t => t.type.name).join(", ");
+
+    captureBtn.onclick = () => {
+      if (!captured.includes(pokemon.id)) {
+        captured.push(pokemon.id);
+        localStorage.setItem(
+          "capturedPokemons",
+          JSON.stringify(captured)
+        );
+        render();
+      }
+    };
+  }
+
+  closeModal.onclick = () => modal.classList.add("hidden");
+
+  search.oninput = render;
+  typeFilter.onchange = render;
+
+  toggleShiny.onclick = () => {
+    shinyMode = !shinyMode;
+    toggleShiny.textContent = shinyMode ? "🔁 Normal" : "✨ Shiny";
+    render();
+  };
+
+  function capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
+  loadPokemons();
 </script>
 
 </body>
