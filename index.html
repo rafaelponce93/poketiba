@@ -6,116 +6,79 @@
 
 <style>
 :root {
-  --accent: #facc15;
-  --mega: #7c3aed;
+  --bg: #f4f4f4;
+  --card: #fff;
+  --text: #000;
+}
+
+body.dark {
+  --bg: #121212;
+  --card: #1e1e1e;
+  --text: #fff;
 }
 
 body {
   margin: 0;
+  padding: 15px;
   font-family: Arial, sans-serif;
-  background: #e5e7eb;
+  background: var(--bg);
+  color: var(--text);
 }
 
-/* HEADER */
-header {
-  background: linear-gradient(135deg, #020617, #0f172a);
-  color: white;
-  padding: 30px 15px;
+h1 {
   text-align: center;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 36px;
-}
-
-header p {
-  margin-top: 6px;
-  color: #cbd5f5;
-}
-
-/* CONTADORES */
-.counters {
+.top-bar {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin-top: 15px;
-  flex-wrap: wrap;
-}
-
-.counter {
-  background: white;
-  color: #111;
-  padding: 10px 18px;
-  border-radius: 20px;
-  font-weight: bold;
-}
-
-/* CONTROLES */
-.controls {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin: 20px;
-}
-
-input {
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 button {
-  padding: 16px 40px;
-  font-size: 20px;
-  font-weight: bold;
-  border: none;
-  border-radius: 40px;
-  background: var(--accent);
+  padding: 14px 24px;
+  font-size: 18px;
   cursor: pointer;
+  border-radius: 10px;
+  border: none;
 }
 
-/* GRID */
+.toggle-btn {
+  background: #ffcc00;
+}
+
+.mode-btn {
+  background: #555;
+  color: white;
+}
+
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 22px;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 18px;
 }
 
-/* CARD */
 .card {
-  background: white;
-  border-radius: 18px;
-  padding: 15px;
+  background: var(--card);
+  border-radius: 14px;
+  padding: 12px;
   text-align: center;
-  box-shadow: 0 6px 15px rgba(0,0,0,.15);
+  box-shadow: 0 4px 10px rgba(0,0,0,.2);
 }
 
 .card img {
-  width: 160px;
-  image-rendering: pixelated;
+  width: 140px;
 }
 
 .name {
   font-weight: bold;
-  margin-top: 8px;
-  font-size: 18px;
-  text-transform: capitalize;
-}
-
-.stat {
-  font-size: 14px;
   margin-top: 6px;
 }
 
-.shiny {
-  border: 3px solid gold;
-}
-
-.mega {
-  border: 3px solid var(--mega);
+.stat {
+  margin-top: 6px;
+  font-size: 15px;
 }
 
 .hidden {
@@ -126,52 +89,43 @@ button {
 
 <body>
 
-<header>
-  <h1>✨ Pokeclt</h1>
-  <p>Shinys & Megas — Atualização Oficial</p>
+<h1>✨ Pokeclt – Shinys & Megas</h1>
 
-  <div class="counters">
-    <div class="counter" id="shinyCount"></div>
-    <div class="counter" id="megaCount"></div>
-  </div>
-</header>
-
-<div class="controls">
-  <input type="text" id="search" placeholder="🔍 Buscar Pokémon...">
-  <button onclick="toggle()">Shinys 🔁 Megas</button>
+<div class="top-bar">
+  <button class="toggle-btn" onclick="toggle()">Shinys 🔁 Megas</button>
+  <button class="mode-btn" onclick="toggleMode()">🌙 / ☀️</button>
 </div>
 
 <div id="shinys" class="grid"></div>
 <div id="megas" class="grid hidden"></div>
 
 <script>
-/* ===== SHINYS ===== */
-const SHINYS = {
+/* ========= SHINYS (última evolução) ========= */
+const DEFAULT_SHINYS = {
   venusaur: 0, charizard: 1, blastoise: 0, butterfree: 0, beedrill: 0,
-  pidgeot: 0, raticate: 0, fearow: 0, arbok: 0, raichu: 0,
-  sandslash: 0, nidoqueen: 0, nidoking: 0, clefable: 0,
-  ninetales: 0, wigglytuff: 0, golbat: 0, vileplume: 0,
-  parasect: 0, venomoth: 0, dugtrio: 0, persian: 0,
-  golduck: 0, primeape: 0, arcanine: 0, poliwrath: 0,
-  alakazam: 0, machamp: 0, victreebel: 0, tentacruel: 0,
-  golem: 0, rapidash: 0, slowbro: 0, magneton: 0,
-  farfetchd: 0, dodrio: 0, dewgong: 0, muk: 0,
-  cloyster: 0, gengar: 0, hypno: 0, kingler: 0,
-  electrode: 0, exeggutor: 0, marowak: 0, hitmonlee: 0,
-  hitmonchan: 0, weezing: 0, rhydon: 0, chansey: 0,
-  tangela: 0, kangaskhan: 0, seadra: 0, seaking: 0,
-  starmie: 0, mrmime: 0, scyther: 0, jynx: 0,
-  electabuzz: 0, magmar: 0, pinsir: 0, tauros: 0,
-  gyarados: 0, lapras: 0, ditto: 0, vaporeon: 0,
-  jolteon: 0, flareon: 0, porygon: 0, omastar: 0,
-  kabutops: 0, aerodactyl: 1, snorlax: 0,
-  articuno: 0, zapdos: 0, moltres: 0,
-  dragonite: 0, mewtwo: 0, mew: 0
+  pidgeot: 0, raichu: 0, sandslash: 0, nidoqueen: 0, nidoking: 0,
+  clefable: 0, ninetales: 0, wigglytuff: 0, vileplume: 0,
+  dugtrio: 0, persian: 0, golduck: 0, primeape: 0, arcanine: 0,
+  poliwrath: 0, alakazam: 0, machamp: 0, victreebel: 0,
+  tentacruel: 0, golem: 0, rapidash: 0, slowbro: 0,
+  magneton: 0, dodrio: 0, dewgong: 0, muk: 0, cloyster: 0,
+  gengar: 0, hypno: 0, kingler: 0, electrode: 0,
+  exeggutor: 0, marowak: 0, weezing: 0, rhydon: 0,
+  chansey: 0, kangaskhan: 0, seaking: 0, starmie: 0,
+  "mr-mime": 0, scyther: 0, jynx: 0, electabuzz: 0,
+  magmar: 0, pinsir: 0, tauros: 0, gyarados: 0,
+  lapras: 0, ditto: 0, vaporeon: 0, jolteon: 0,
+  flareon: 0, porygon: 0, omastar: 0, kabutops: 0,
+  aerodactyl: 1, snorlax: 0, articuno: 0,
+  zapdos: 0, moltres: 0, dragonite: 0, mewtwo: 0, mew: 0
 };
 
-/* ===== MEGAS ===== */
+const shinys = JSON.parse(localStorage.getItem("shinys")) || DEFAULT_SHINYS;
+localStorage.setItem("shinys", JSON.stringify(shinys));
+
+/* ========= MEGAS ========= */
 const MEGAS = {
-  "charizard-megax": { nome: "Mega Charizard X", player: "Rafael" },
+  "charizard-mega-x": { nome: "Mega Charizard X", player: "Rafael" },
   "alakazam-mega": { nome: "Mega Alakazam", player: "" },
   "gengar-mega": { nome: "Mega Gengar", player: "" },
   "gyarados-mega": { nome: "Mega Gyarados", player: "" },
@@ -184,67 +138,76 @@ const MEGAS = {
   "beedrill-mega": { nome: "Mega Beedrill", player: "" }
 };
 
-/* CONTADORES */
-document.getElementById("shinyCount").textContent =
-  `✨ Shinys: ${Object.values(SHINYS).filter(v => v > 0).length} / ${Object.keys(SHINYS).length}`;
-
-document.getElementById("megaCount").textContent =
-  `🧬 Megas: ${Object.keys(MEGAS).length}`;
-
-/* RENDER SHINYS */
+/* ========= RENDER SHINYS ========= */
 const shinyDiv = document.getElementById("shinys");
-const megaDiv = document.getElementById("megas");
 
-function renderShinys(filter="") {
+function renderShinys() {
   shinyDiv.innerHTML = "";
-  for (const pkm in SHINYS) {
-    if (!pkm.includes(filter)) continue;
-
+  for (const pkm in shinys) {
     const card = document.createElement("div");
     card.className = "card";
-    if (SHINYS[pkm] > 0) card.classList.add("shiny");
 
-    card.innerHTML = `
-      <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${pkm}.gif">
-      <div class="name">${pkm}</div>
-      <div class="stat">✨ Shinys capturados: ${SHINYS[pkm]}</div>
-    `;
+    const img = document.createElement("img");
+    img.src = `https://play.pokemonshowdown.com/sprites/ani-shiny/${pkm}.gif`;
+
+    const name = document.createElement("div");
+    name.className = "name";
+    name.textContent = pkm.replace("-", " ");
+
+    const stat = document.createElement("div");
+    stat.className = "stat";
+    stat.textContent = `✨ Shinys: ${shinys[pkm]}`;
+
+    card.onclick = () => {
+      const v = prompt(`Quantos shinys de ${pkm}?`, shinys[pkm]);
+      if (v !== null) {
+        shinys[pkm] = Number(v);
+        localStorage.setItem("shinys", JSON.stringify(shinys));
+        renderShinys();
+      }
+    };
+
+    card.append(img, name, stat);
     shinyDiv.appendChild(card);
   }
 }
+renderShinys();
 
-/* RENDER MEGAS */
-function renderMegas(filter="") {
-  megaDiv.innerHTML = "";
-  for (const m in MEGAS) {
-    if (!MEGAS[m].nome.toLowerCase().includes(filter)) continue;
+/* ========= RENDER MEGAS ========= */
+const megaDiv = document.getElementById("megas");
 
-    const card = document.createElement("div");
-    card.className = "card mega";
+for (const mega in MEGAS) {
+  const card = document.createElement("div");
+  card.className = "card";
 
-    card.innerHTML = `
-      <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
-      <div class="name">${MEGAS[m].nome}</div>
-      <div class="stat">👤 Player: ${MEGAS[m].player || "-"}</div>
-    `;
-    megaDiv.appendChild(card);
-  }
+  const img = document.createElement("img");
+  img.src = `https://play.pokemonshowdown.com/sprites/ani/${mega}.gif`;
+
+  const name = document.createElement("div");
+  name.className = "name";
+  name.textContent = MEGAS[mega].nome;
+
+  const player = document.createElement("div");
+  player.className = "stat";
+  player.textContent = `👤 Player: ${MEGAS[mega].player || "-"}`;
+
+  card.append(img, name, player);
+  megaDiv.appendChild(card);
 }
 
-renderShinys();
-renderMegas();
-
-/* BUSCA */
-document.getElementById("search").addEventListener("input", e => {
-  const v = e.target.value.toLowerCase();
-  renderShinys(v);
-  renderMegas(v);
-});
-
-/* TOGGLE */
+/* ========= TOGGLES ========= */
 function toggle() {
   shinyDiv.classList.toggle("hidden");
   megaDiv.classList.toggle("hidden");
+}
+
+function toggleMode() {
+  document.body.classList.toggle("dark");
+  localStorage.setItem("mode", document.body.classList.contains("dark"));
+}
+
+if (localStorage.getItem("mode") === "true") {
+  document.body.classList.add("dark");
 }
 </script>
 
