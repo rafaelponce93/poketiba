@@ -63,27 +63,26 @@ h1 {
 
 <script>
 // ==================================================
-// 👉 LISTA – ÚLTIMAS EVOLUÇÕES DE KANTO 👈
+// 👉 ÚLTIMAS EVOLUÇÕES DE KANTO
 // ==================================================
 const ULTIMAS_EVOLUCOES = [
-  "venusaur","charizard","blastoise",
-  "butterfree","beedrill","pidgeot","raticate","fearow","arbok",
-  "raichu","sandslash","nidoqueen","nidoking","clefable","ninetales",
-  "wigglytuff","golbat","vileplume","parasect","venomoth","dugtrio",
-  "persian","golduck","primeape","arcanine","poliwrath","alakazam",
-  "machamp","victreebel","tentacruel","golem","rapidash","slowbro",
-  "magneton","farfetchd","dodrio","dewgong","muk","cloyster","gengar",
-  "onix","hypno","kingler","electrode","exeggutor","marowak",
-  "hitmonlee","hitmonchan","lickitung","weezing","rhydon","chansey",
-  "tangela","kangaskhan","seadra","seaking","starmie","mr-mime",
-  "scyther","jynx","electabuzz","magmar","pinsir","tauros",
-  "gyarados","lapras","ditto","vaporeon","jolteon","flareon",
-  "porygon","omastar","kabutops","aerodactyl","snorlax",
-  "articuno","zapdos","moltres","dragonite","mewtwo","mew"
+  "venusaur","charizard","blastoise","butterfree","beedrill","pidgeot",
+  "raticate","fearow","arbok","raichu","sandslash","nidoqueen","nidoking",
+  "clefable","ninetales","wigglytuff","golbat","vileplume","parasect",
+  "venomoth","dugtrio","persian","golduck","primeape","arcanine",
+  "poliwrath","alakazam","machamp","victreebel","tentacruel","golem",
+  "rapidash","slowbro","magneton","farfetchd","dodrio","dewgong","muk",
+  "cloyster","gengar","onix","hypno","kingler","electrode","exeggutor",
+  "marowak","hitmonlee","hitmonchan","lickitung","weezing","rhydon",
+  "chansey","tangela","kangaskhan","seadra","seaking","starmie","mr-mime",
+  "scyther","jynx","electabuzz","magmar","pinsir","tauros","gyarados",
+  "lapras","ditto","vaporeon","jolteon","flareon","porygon","omastar",
+  "kabutops","aerodactyl","snorlax","articuno","zapdos","moltres",
+  "dragonite","mewtwo","mew"
 ];
 
 // ==================================================
-// 👉 SHINYS (VOCÊ SÓ MUDA OS NÚMEROS) 👈
+// 👉 SHINYS (EDITÁVEL)
 // ==================================================
 const SHINYS = {
   venusaur: 0,
@@ -91,12 +90,28 @@ const SHINYS = {
   blastoise: 0,
   golem: 0,
   rhydon: 0,
+  alakazam: 0,
   gengar: 0,
   gyarados: 0,
+  pinsir: 0,
+  aerodactyl: 1
+};
+
+// ==================================================
+// 👉 MEGAS FEITOS (EDITÁVEL)
+// ==================================================
+const MEGAS = {
+  charizard: 1,
+  blastoise: 0,
+  venusaur: 0,
+  beedrill: 0,
   aerodactyl: 1,
-  dragonite: 0,
-  mewtwo: 0,
-  mew: 0
+  kangaskhan: 0,
+  pidgeot: 0,
+  alakazam: 0,
+  gengar: 0,
+  gyarados: 0,
+  pinsir: 0
 };
 
 const container = document.getElementById("pokemon-container");
@@ -106,6 +121,9 @@ async function loadPokemon() {
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
     const data = await res.json();
 
+    const shiny = SHINYS[name] ?? 0;
+    const mega = MEGAS[name];
+
     const card = document.createElement("div");
     card.className = "pokemon-card";
 
@@ -113,7 +131,8 @@ async function loadPokemon() {
       <img src="${data.sprites.front_default}">
       <div class="pokemon-name">${data.name}</div>
       <div class="types">${data.types.map(t => t.type.name).join(" / ")}</div>
-      <div class="stat">✨ Shinys capturados: ${SHINYS[data.name] ?? 0}</div>
+      <div class="stat">✨ Shinys capturados: ${shiny}</div>
+      ${mega !== undefined ? `<div class="stat">🧬 Megas feitos: ${mega}</div>` : ""}
     `;
 
     container.appendChild(card);
