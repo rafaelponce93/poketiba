@@ -7,14 +7,14 @@
 <style>
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  background: linear-gradient(180deg, #f7f7f7, #ececec);
+  background: linear-gradient(180deg, #f7f7f7, #eaeaea);
   margin: 0;
   padding: 16px;
 }
 
 h1 {
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 #controls {
@@ -39,45 +39,39 @@ button.active {
 
 #pokemon-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 18px;
 }
 
 .pokemon-card {
   background: white;
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 16px;
   text-align: center;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
 }
 
 .pokemon-card img {
-  width: 128px;
-  height: 128px;
-  image-rendering: pixelated;
+  width: 160px;
+  height: 160px;
 }
 
 .pokemon-name {
   font-weight: bold;
   text-transform: capitalize;
-  font-size: 16px;
+  font-size: 17px;
   margin-top: 8px;
 }
 
 .types {
   font-size: 13px;
-  color: #666;
+  color: #555;
 }
 
 .stat {
-  margin-top: 8px;
+  margin-top: 10px;
   font-size: 14px;
   font-weight: bold;
-}
-
-.player {
-  margin-top: 6px;
-  font-size: 13px;
 }
 </style>
 </head>
@@ -94,138 +88,121 @@ button.active {
 <div id="pokemon-container"></div>
 
 <script>
-/* ==================================================
-   👉 LISTA COMPLETA – NÃO SERÁ REDUZIDA 👈
-   Últimas evoluções da 1ª geração
-   ================================================== */
+/* =====================================================
+   👉 LISTA COMPLETA – SHINYS (EDITA AQUI)
+   ===================================================== */
 
-const DATA = {
-  venusaur:{shiny:0,mega:0,player:""},
-  charizard:{shiny:1,mega:1,player:"Rafael"},
-  blastoise:{shiny:0,mega:0,player:""},
-  butterfree:{shiny:0,mega:0,player:""},
-  beedrill:{shiny:0,mega:0,player:""},
-  pidgeot:{shiny:0,mega:0,player:""},
-  raticate:{shiny:0,mega:0,player:""},
-  fearow:{shiny:0,mega:0,player:""},
-  arbok:{shiny:0,mega:0,player:""},
-  raichu:{shiny:0,mega:0,player:""},
-  sandslash:{shiny:0,mega:0,player:""},
-  nidoqueen:{shiny:0,mega:0,player:""},
-  nidoking:{shiny:0,mega:0,player:""},
-  clefable:{shiny:0,mega:0,player:""},
-  ninetales:{shiny:0,mega:0,player:""},
-  wigglytuff:{shiny:0,mega:0,player:""},
-  golbat:{shiny:0,mega:0,player:""},
-  vileplume:{shiny:0,mega:0,player:""},
-  parasect:{shiny:0,mega:0,player:""},
-  venomoth:{shiny:0,mega:0,player:""},
-  dugtrio:{shiny:0,mega:0,player:""},
-  persian:{shiny:0,mega:0,player:""},
-  golduck:{shiny:0,mega:0,player:""},
-  primeape:{shiny:0,mega:0,player:""},
-  arcanine:{shiny:0,mega:0,player:""},
-  poliwrath:{shiny:0,mega:0,player:""},
-  alakazam:{shiny:0,mega:0,player:""},
-  machamp:{shiny:0,mega:0,player:""},
-  victreebel:{shiny:0,mega:0,player:""},
-  tentacruel:{shiny:0,mega:0,player:""},
-  golem:{shiny:0,mega:0,player:""},
-  rapidash:{shiny:0,mega:0,player:""},
-  slowbro:{shiny:0,mega:0,player:""},
-  magneton:{shiny:0,mega:0,player:""},
-  dodrio:{shiny:0,mega:0,player:""},
-  dewgong:{shiny:0,mega:0,player:""},
-  muk:{shiny:0,mega:0,player:""},
-  cloyster:{shiny:0,mega:0,player:""},
-  gengar:{shiny:0,mega:0,player:""},
-  hypno:{shiny:0,mega:0,player:""},
-  kingler:{shiny:0,mega:0,player:""},
-  electrode:{shiny:0,mega:0,player:""},
-  exeggutor:{shiny:0,mega:0,player:""},
-  marowak:{shiny:0,mega:0,player:""},
-  hitmonlee:{shiny:0,mega:0,player:""},
-  hitmonchan:{shiny:0,mega:0,player:""},
-  weezing:{shiny:0,mega:0,player:""},
-  rhydon:{shiny:0,mega:0,player:""},
-  chansey:{shiny:0,mega:0,player:""},
-  kangaskhan:{shiny:0,mega:0,player:""},
-  seaking:{shiny:0,mega:0,player:""},
-  starmie:{shiny:0,mega:0,player:""},
-  scyther:{shiny:0,mega:0,player:""},
-  jynx:{shiny:0,mega:0,player:""},
-  electabuzz:{shiny:0,mega:0,player:""},
-  magmar:{shiny:0,mega:0,player:""},
-  pinsir:{shiny:0,mega:0,player:""},
-  tauros:{shiny:0,mega:0,player:""},
-  gyarados:{shiny:0,mega:0,player:""},
-  lapras:{shiny:0,mega:0,player:""},
-  ditto:{shiny:0,mega:0,player:""},
-  vaporeon:{shiny:0,mega:0,player:""},
-  jolteon:{shiny:0,mega:0,player:""},
-  flareon:{shiny:0,mega:0,player:""},
-  porygon:{shiny:0,mega:0,player:""},
-  omastar:{shiny:0,mega:0,player:""},
-  kabutops:{shiny:0,mega:0,player:""},
-  aerodactyl:{shiny:1,mega:1,player:"Carlos"},
-  snorlax:{shiny:0,mega:0,player:""},
-  articuno:{shiny:0,mega:0,player:""},
-  zapdos:{shiny:0,mega:0,player:""},
-  moltres:{shiny:0,mega:0,player:""},
-  dragonite:{shiny:0,mega:0,player:""},
-  mewtwo:{shiny:0,mega:0,player:""},
-  mew:{shiny:0,mega:0,player:""}
+const SHINYS = {
+  venusaur: 0, charizard: 1, blastoise: 0,
+  butterfree: 0, beedrill: 0, pidgeot: 0,
+  raticate: 0, fearow: 0, arbok: 0, raichu: 0,
+  sandslash: 0, nidoqueen: 0, nidoking: 0,
+  clefable: 0, ninetales: 0, wigglytuff: 0,
+  golbat: 0, vileplume: 0, parasect: 0,
+  venomoth: 0, dugtrio: 0, persian: 0,
+  golduck: 0, primeape: 0, arcanine: 0,
+  poliwrath: 0, alakazam: 0, machamp: 0,
+  victreebel: 0, tentacruel: 0, golem: 0,
+  rapidash: 0, slowbro: 0, magneton: 0,
+  dodrio: 0, dewgong: 0, muk: 0,
+  cloyster: 0, gengar: 0, hypno: 0,
+  kingler: 0, electrode: 0, exeggutor: 0,
+  marowak: 0, hitmonlee: 0, hitmonchan: 0,
+  weezing: 0, rhydon: 0, chansey: 0,
+  tangela: 0, kangaskhan: 0, seadra: 0,
+  seaking: 0, starmie: 0, "mr-mime": 0,
+  scyther: 0, jynx: 0, electabuzz: 0,
+  magmar: 0, pinsir: 0, tauros: 0,
+  gyarados: 0, lapras: 0, ditto: 0,
+  vaporeon: 0, jolteon: 0, flareon: 0,
+  porygon: 0, omastar: 0, kabutops: 0,
+  aerodactyl: 1, snorlax: 0,
+  articuno: 0, zapdos: 0, moltres: 0,
+  dragonite: 0, mewtwo: 0, mew: 0
 };
 
-/* ===== Sprites Mega ===== */
+/* =====================================================
+   👉 MEGAS + PLAYER
+   ===================================================== */
+
 const MEGAS = {
-  venusaur:"https://play.pokemonshowdown.com/sprites/xyani/venusaur-mega.gif",
-  charizard:"https://play.pokemonshowdown.com/sprites/xyani/charizard-mega-x.gif",
-  blastoise:"https://play.pokemonshowdown.com/sprites/xyani/blastoise-mega.gif",
-  beedrill:"https://play.pokemonshowdown.com/sprites/xyani/beedrill-mega.gif",
-  pidgeot:"https://play.pokemonshowdown.com/sprites/xyani/pidgeot-mega.gif",
-  alakazam:"https://play.pokemonshowdown.com/sprites/xyani/alakazam-mega.gif",
-  gengar:"https://play.pokemonshowdown.com/sprites/xyani/gengar-mega.gif",
-  kangaskhan:"https://play.pokemonshowdown.com/sprites/xyani/kangaskhan-mega.gif",
-  pinsir:"https://play.pokemonshowdown.com/sprites/xyani/pinsir-mega.gif",
-  gyarados:"https://play.pokemonshowdown.com/sprites/xyani/gyarados-mega.gif",
-  aerodactyl:"https://play.pokemonshowdown.com/sprites/xyani/aerodactyl-mega.gif"
+  venusaur: { count: 0, player: "" },
+  charizard: { count: 1, player: "Você" },
+  blastoise: { count: 0, player: "" },
+  beedrill: { count: 0, player: "" },
+  pidgeot: { count: 0, player: "" },
+  alakazam: { count: 0, player: "" },
+  gengar: { count: 0, player: "" },
+  gyarados: { count: 0, player: "" },
+  kangaskhan: { count: 0, player: "" },
+  pinsir: { count: 0, player: "" },
+  aerodactyl: { count: 1, player: "Você" }
 };
 
-const container=document.getElementById("pokemon-container");
-const btnShiny=document.getElementById("btnShiny");
-const btnMega=document.getElementById("btnMega");
-let mode="shiny";
+const FINAL_EVOS = Object.keys(SHINYS);
+const container = document.getElementById("pokemon-container");
+let mode = "shiny";
 
-btnShiny.onclick=()=>switchMode("shiny");
-btnMega.onclick=()=>switchMode("mega");
+document.getElementById("btnShiny").onclick = () => setMode("shiny");
+document.getElementById("btnMega").onclick = () => setMode("mega");
 
-function switchMode(m){
-  mode=m;
-  btnShiny.classList.toggle("active",m==="shiny");
-  btnMega.classList.toggle("active",m==="mega");
-  render();
+function setMode(m) {
+  mode = m;
+  document.getElementById("btnShiny").classList.toggle("active", m==="shiny");
+  document.getElementById("btnMega").classList.toggle("active", m==="mega");
+  load();
 }
 
-async function render(){
-  container.innerHTML="";
-  for(const name in DATA){
-    if(mode==="mega"&&!MEGAS[name])continue;
-    const api=await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`).then(r=>r.json());
-    const img=mode==="mega"?MEGAS[name]:api.sprites.front_shiny;
-    const card=document.createElement("div");
-    card.className="pokemon-card";
-    card.innerHTML=`
-      <img src="${img}">
-      <div class="pokemon-name">${api.name}</div>
-      <div class="types">${api.types.map(t=>t.type.name).join(" / ")}</div>
-      <div class="stat">${mode==="shiny"?"✨ Shinys":"🧬 Megas"}: ${DATA[name][mode]}</div>
-      ${mode==="mega"&&DATA[name].player?`<div class="player">👤 ${DATA[name].player}</div>`:""}
-    `;
+async function load() {
+  container.innerHTML = "";
+
+  for (const name of FINAL_EVOS) {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    const data = await res.json();
+
+    const card = document.createElement("div");
+    card.className = "pokemon-card";
+
+    const img = document.createElement("img");
+
+    if (mode === "shiny") {
+      img.src = `https://play.pokemonshowdown.com/sprites/xyani-shiny/${name}.gif`;
+    } else {
+      if (name === "charizard") {
+        img.src = "https://img.pokemondb.net/sprites/black-white/anim/mega-charizard-x.gif";
+      } else {
+        img.src = `https://play.pokemonshowdown.com/sprites/xyani/${name}.gif`;
+      }
+    }
+
+    const title = document.createElement("div");
+    title.className = "pokemon-name";
+    title.textContent = name;
+
+    const types = document.createElement("div");
+    types.className = "types";
+    types.textContent = data.types.map(t => t.type.name).join(" / ");
+
+    card.appendChild(img);
+    card.appendChild(title);
+    card.appendChild(types);
+
+    if (mode === "shiny") {
+      card.innerHTML += `<div class="stat">✨ Shinys capturados: ${SHINYS[name]}</div>`;
+    }
+
+    if (mode === "mega" && MEGAS[name]) {
+      card.innerHTML += `
+        <div class="stat">🧬 Megas feitos: ${MEGAS[name].count}</div>
+        <div class="stat">👤 Player: ${MEGAS[name].player || "-"}</div>
+      `;
+    }
+
     container.appendChild(card);
   }
 }
-render();
+
+load();
 </script>
 
 </body>
