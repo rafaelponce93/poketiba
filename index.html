@@ -2,61 +2,49 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Poketiba – Kanto Dex</title>
+<title>Poketiba – Shinydex Kanto</title>
+
 <style>
 body {
-    font-family: Arial, sans-serif;
-    background: #f2f2f2;
-    margin: 0;
-    padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  padding: 20px;
 }
 
 h1 {
-    text-align: center;
+  text-align: center;
 }
 
 #pokemon-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
 }
 
 .pokemon-card {
-    background: white;
-    border-radius: 10px;
-    padding: 10px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,.1);
 }
 
 .pokemon-card img {
-    width: 96px;
-    height: 96px;
+  width: 96px;
 }
 
-.pokemon-name {
-    font-weight: bold;
-    text-transform: capitalize;
+.name {
+  font-weight: bold;
+  text-transform: capitalize;
 }
 
-.types {
-    font-size: 12px;
-    margin: 5px 0;
-}
-
-label {
-    font-size: 12px;
-    display: block;
-    margin-top: 5px;
-}
-
-input {
-    width: 60px;
-    text-align: center;
-    padding: 5px;
+.stat {
+  font-size: 13px;
+  margin-top: 5px;
 }
 </style>
 </head>
+
 <body>
 
 <h1>✨ Poketiba – Shinydex Kanto</h1>
@@ -64,85 +52,76 @@ input {
 <div id="pokemon-container"></div>
 
 <script>
-const container = document.getElementById("pokemon-container");
+// ======================================
+// 👉 EDITE OS SHINYS AQUI (VISÍVEL) 👈
+// ======================================
+const SHINYS = {
+  bulbasaur: 0,
+  ivysaur: 0,
+  venusaur: 0,
+  charmander: 0,
+  charmeleon: 0,
+  charizard: 1,
+  squirtle: 0,
+  wartortle: 0,
+  blastoise: 0,
+  caterpie: 0,
+  metapod: 0,
+  butterfree: 0,
+  weedle: 0,
+  kakuna: 0,
+  beedrill: 0,
+  pidgey: 0,
+  pidgeotto: 0,
+  pidgeot: 0,
+  pikachu: 0,
+  raichu: 0,
+  zubat: 0,
+  golbat: 0,
+  abra: 0,
+  kadabra: 0,
+  alakazam: 0,
+  gastly: 0,
+  haunter: 0,
+  gengar: 0,
+  magikarp: 0,
+  gyarados: 0,
+  aerodactyl: 1,
+  mewtwo: 0
+};
 
-// Pokémon que possuem Mega
-const megaPokemon = [
-    "beedrill",
-    "charizard",
-    "blastoise",
-    "venusaur",
-    "aerodactyl",
-    "kangaskhan",
-    "pidgeot",
-    "alakazam",
-    "gengar",
-    "gyarados",
-    "pinsir"
+// Pokémon com Mega
+const MEGAS = [
+  "charizard",
+  "blastoise",
+  "venusaur",
+  "beedrill",
+  "aerodactyl",
+  "pidgeot",
+  "alakazam",
+  "gengar",
+  "gyarados"
 ];
 
+const container = document.getElementById("pokemon-container");
+
 async function loadPokemon() {
-    for (let i = 1; i <= 151; i++) {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
-        const data = await response.json();
+  for (let i = 1; i <= 151; i++) {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
+    const data = await res.json();
 
-        const card = document.createElement("div");
-        card.className = "pokemon-card";
+    const card = document.createElement("div");
+    card.className = "pokemon-card";
 
-        const img = document.createElement("img");
-        img.src = data.sprites.front_default;
+    card.innerHTML = `
+      <img src="${data.sprites.front_default}">
+      <div class="name">${data.name}</div>
+      <div class="stat">✨ Shinys capturados: ${SHINYS[data.name] ?? 0}</div>
+      ${MEGAS.includes(data.name) ? `<div class="stat">🧬 Megas feitos</div>` : ""}
+    `;
 
-        const name = document.createElement("div");
-        name.className = "pokemon-name";
-        name.textContent = data.name;
-
-        const types = document.createElement("div");
-        types.className = "types";
-        types.textContent = data.types.map(t => t.type.name).join(" / ");
-
-        // Shinys capturados
-        const shinyLabel = document.createElement("label");
-        shinyLabel.textContent = "Shinys capturados:";
-
-        const shinyInput = document.createElement("input");
-        shinyInput.type = "number";
-        shinyInput.min = 0;
-
-        const shinySaved = localStorage.getItem(`pokemon-${data.id}-shiny`);
-        if (shinySaved !== null) shinyInput.value = shinySaved;
-
-        shinyInput.addEventListener("change", () => {
-            localStorage.setItem(`pokemon-${data.id}-shiny`, shinyInput.value);
-        });
-
-        card.appendChild(img);
-        card.appendChild(name);
-        card.appendChild(types);
-        card.appendChild(shinyLabel);
-        card.appendChild(shinyInput);
-
-        // Megas feitos (apenas para alguns Pokémon)
-        if (megaPokemon.includes(data.name)) {
-            const megaLabel = document.createElement("label");
-            megaLabel.textContent = "Megas feitos:";
-
-            const megaInput = document.createElement("input");
-            megaInput.type = "number";
-            megaInput.min = 0;
-
-            const megaSaved = localStorage.getItem(`pokemon-${data.id}-mega`);
-            if (megaSaved !== null) megaInput.value = megaSaved;
-
-            megaInput.addEventListener("change", () => {
-                localStorage.setItem(`pokemon-${data.id}-mega`, megaInput.value);
-            });
-
-            card.appendChild(megaLabel);
-            card.appendChild(megaInput);
-        }
-
-        container.appendChild(card);
-    }
+    container.appendChild(card);
+  }
 }
 
 loadPokemon();
