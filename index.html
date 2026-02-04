@@ -25,10 +25,10 @@ h1 {
 }
 
 button {
-  padding: 14px 28px;
-  font-size: 18px;
+  padding: 16px 32px;
+  font-size: 20px;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 12px;
   border: none;
   background: #ffcc00;
   font-weight: bold;
@@ -36,26 +36,25 @@ button {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 18px;
 }
 
 .card {
   background: white;
   border-radius: 14px;
-  padding: 12px;
+  padding: 14px;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0,0,0,.2);
 }
 
 .card img {
-  width: 140px;
+  width: 150px;
 }
 
 .name {
   font-weight: bold;
   margin-top: 6px;
-  text-transform: capitalize;
 }
 
 .stat {
@@ -84,83 +83,31 @@ button {
 <div id="special" class="grid hidden"></div>
 
 <script>
-/* ======================
-   👉 EDITE OS SHINYS 👈
-   ====================== */
+/* ========= SHINYS ========= */
 const SHINYS = {
-  venusaur: 0,
   charizard: 1,
-  blastoise: 0,
-  butterfree: 0,
-  beedrill: 0,
-  pidgeot: 0,
-  raichu: 0,
-  nidoqueen: 0,
-  nidoking: 0,
-  ninetales: 0,
-  vileplume: 0,
-  golduck: 0,
-  arcanine: 0,
-  alakazam: 0,
-  machamp: 0,
-  golem: 0,
-  slowbro: 0,
-  gengar: 0,
-  rhydon: 0,
-  chansey: 0,
-  kangaskhan: 0,
-  starmie: 0,
-  "mr-mime": 0,
-  scyther: 0,
-  jynx: 0,
-  electabuzz: 0,
-  magmar: 0,
-  pinsir: 0,
-  gyarados: 0,
-  lapras: 0,
-  vaporeon: 0,
-  jolteon: 0,
-  flareon: 0,
   aerodactyl: 1,
-  snorlax: 0,
-  articuno: 0,
-  zapdos: 0,
-  moltres: 0,
-  dragonite: 0,
-  mewtwo: 0,
-  mew: 0
+  "mr-mime": 0
 };
 
-/* ======================
-   👉 EDITE OS MEGAS 👈
-   ====================== */
+/* ========= MEGAS ========= */
 const MEGAS = {
-  "charizard-mega-x": { nome: "Mega Charizard X", player: "Rafael" },
-  "alakazam-mega": { nome: "Mega Alakazam", player: "" },
-  "gengar-mega": { nome: "Mega Gengar", player: "" },
-  "gyarados-mega": { nome: "Mega Gyarados", player: "" },
-  "kangaskhan-mega": { nome: "Mega Kangaskhan", player: "" },
-  "pinsir-mega": { nome: "Mega Pinsir", player: "" },
-  "pidgeot-mega": { nome: "Mega Pidgeot", player: "" },
-  "aerodactyl-mega": { nome: "Mega Aerodactyl", player: "" },
-  "venusaur-mega": { nome: "Mega Venusaur", player: "" },
-  "blastoise-mega": { nome: "Mega Blastoise", player: "" },
-  "beedrill-mega": { nome: "Mega Beedrill", player: "" }
+  charizardX: {
+    nome: "Mega Charizard X",
+    img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",
+    player: "Rafael"
+  }
 };
 
-/* ======================
-   👉 ESPECIAIS 👈
-   ====================== */
+/* ========= ESPECIAIS ========= */
 const SPECIALS = [
   {
     nome: "Crystal Onix",
-    img: "https://static.wikia.nocookie.net/pokemon/images/3/3e/Crystal_Onix.png"
+    img: "https://archives.bulbagarden.net/media/upload/7/7b/Crystal_Onix.png"
   }
 ];
 
-/* ======================
-   RENDER SHINYS
-   ====================== */
+/* ========= RENDER SHINYS ========= */
 const shinyDiv = document.getElementById("shinys");
 
 for (const pkm in SHINYS) {
@@ -172,7 +119,7 @@ for (const pkm in SHINYS) {
 
   const name = document.createElement("div");
   name.className = "name";
-  name.textContent = pkm === "mr-mime" ? "Mr. Mime" : pkm.replace("-", " ");
+  name.textContent = pkm === "mr-mime" ? "Mr. Mime" : pkm;
 
   const stat = document.createElement("div");
   stat.className = "stat";
@@ -182,33 +129,29 @@ for (const pkm in SHINYS) {
   shinyDiv.appendChild(card);
 }
 
-/* ======================
-   RENDER MEGAS
-   ====================== */
+/* ========= RENDER MEGAS ========= */
 const megaDiv = document.getElementById("megas");
 
-for (const mega in MEGAS) {
+for (const m in MEGAS) {
   const card = document.createElement("div");
   card.className = "card";
 
   const img = document.createElement("img");
-  img.src = `https://play.pokemonshowdown.com/sprites/ani/${mega}.gif`;
+  img.src = MEGAS[m].img;
 
   const name = document.createElement("div");
   name.className = "name";
-  name.textContent = MEGAS[mega].nome;
+  name.textContent = MEGAS[m].nome;
 
   const player = document.createElement("div");
   player.className = "stat";
-  player.textContent = `👤 Player: ${MEGAS[mega].player || "-"}`;
+  player.textContent = `👤 Player: ${MEGAS[m].player}`;
 
   card.append(img, name, player);
   megaDiv.appendChild(card);
 }
 
-/* ======================
-   RENDER ESPECIAIS
-   ====================== */
+/* ========= RENDER ESPECIAIS ========= */
 const specialDiv = document.getElementById("special");
 
 SPECIALS.forEach(sp => {
@@ -226,13 +169,11 @@ SPECIALS.forEach(sp => {
   specialDiv.appendChild(card);
 });
 
-/* ======================
-   CONTROLE DE TELAS
-   ====================== */
+/* ========= TOGGLE ========= */
 function showTab(tab) {
-  document.getElementById("shinys").classList.add("hidden");
-  document.getElementById("megas").classList.add("hidden");
-  document.getElementById("special").classList.add("hidden");
+  shinys.classList.add("hidden");
+  megas.classList.add("hidden");
+  special.classList.add("hidden");
   document.getElementById(tab).classList.remove("hidden");
 }
 </script>
