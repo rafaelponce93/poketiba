@@ -8,6 +8,7 @@
 :root {
   --accent: #facc15;
   --mega: #7c3aed;
+  --special: #0ea5e9;
 }
 
 body {
@@ -109,17 +110,11 @@ button {
   margin-top: 6px;
 }
 
-.shiny {
-  border: 3px solid gold;
-}
+.shiny { border: 3px solid gold; }
+.mega { border: 3px solid var(--mega); }
+.special { border: 3px solid var(--special); }
 
-.mega {
-  border: 3px solid var(--mega);
-}
-
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 </style>
 </head>
 
@@ -127,111 +122,50 @@ button {
 
 <header>
   <h1>✨ Pokeclt</h1>
-  <p>Shinys & Megas — Atualização Oficial</p>
+  <p>Shinys, Megas & Especiais — Atualização Oficial</p>
 
   <div class="counters">
     <div class="counter" id="shinyCount"></div>
     <div class="counter" id="megaCount"></div>
+    <div class="counter" id="specialCount"></div>
   </div>
 </header>
 
 <div class="controls">
   <input type="text" id="search" placeholder="🔍 Buscar Pokémon...">
-  <button onclick="toggle()">Shinys 🔁 Megas</button>
+  <button onclick="toggle()">Shinys 🔁 Megas 🔁 Especiais</button>
 </div>
 
 <div id="shinys" class="grid"></div>
 <div id="megas" class="grid hidden"></div>
+<div id="specials" class="grid hidden"></div>
 
 <script>
-/* =====================================================
-   🔧 ÁREA ADMIN – ATUALIZE SOMENTE OS NÚMEROS
-   NINGUÉM CONSEGUE ALTERAR ISSO PELA PÁGINA
-===================================================== */
-
+/* ===================== SHINYS (INALTERADO) ===================== */
 const SHINYS = {
-  venusaur: 0,
-  charizard: 1,
-  blastoise: 0,
-  butterfree: 0,
-  beedrill: 0,
-  pidgeot: 0,
-  raticate: 0,
-  fearow: 0,
-  arbok: 0,
-  raichu: 0,
-  sandslash: 0,
-  nidoqueen: 0,
-  nidoking: 0,
-  clefable: 0,
-  ninetales: 0,
-  wigglytuff: 0,
-  golbat: 0,
-  vileplume: 0,
-  parasect: 0,
-  venomoth: 0,
-  dugtrio: 0,
-  persian: 0,
-  golduck: 0,
-  primeape: 0,
-  arcanine: 0,
-  poliwrath: 0,
-  alakazam: 0,
-  machamp: 0,
-  victreebel: 0,
-  tentacruel: 0,
-  golem: 0,
-  rapidash: 0,
-  slowbro: 0,
-  magneton: 0,
-  farfetchd: 0,
-  dodrio: 0,
-  dewgong: 0,
-  muk: 0,
-  cloyster: 0,
-  gengar: 0,
-  hypno: 0,
-  kingler: 0,
-  electrode: 0,
-  exeggutor: 0,
-  marowak: 0,
-  hitmonlee: 0,
-  hitmonchan: 0,
-  weezing: 0,
-  rhydon: 0,
-  chansey: 0,
-  tangela: 0,
-  kangaskhan: 0,
-  seadra: 0,
-  seaking: 0,
-  starmie: 0,
-  mrmime: 0,
-  scyther: 0,
-  jynx: 0,
-  electabuzz: 0,
-  magmar: 0,
-  pinsir: 0,
-  tauros: 0,
-  gyarados: 0,
-  lapras: 0,
-  ditto: 0,
-  vaporeon: 0,
-  jolteon: 0,
-  flareon: 0,
-  porygon: 0,
-  omastar: 0,
-  kabutops: 0,
-  aerodactyl: 1,
-  snorlax: 0,
-  articuno: 0,
-  zapdos: 0,
-  moltres: 0,
-  dragonite: 0,
-  mewtwo: 0,
-  mew: 0
+  venusaur: 0, charizard: 1, blastoise: 0, butterfree: 0, beedrill: 0,
+  pidgeot: 0, raticate: 0, fearow: 0, arbok: 0, raichu: 0,
+  sandslash: 0, nidoqueen: 0, nidoking: 0, clefable: 0,
+  ninetales: 0, wigglytuff: 0, golbat: 0, vileplume: 0,
+  parasect: 0, venomoth: 0, dugtrio: 0, persian: 0,
+  golduck: 0, primeape: 0, arcanine: 0, poliwrath: 0,
+  alakazam: 0, machamp: 0, victreebel: 0, tentacruel: 0,
+  golem: 0, rapidash: 0, slowbro: 0, magneton: 0,
+  farfetchd: 0, dodrio: 0, dewgong: 0, muk: 0,
+  cloyster: 0, gengar: 0, hypno: 0, kingler: 0,
+  electrode: 0, exeggutor: 0, marowak: 0, hitmonlee: 0,
+  hitmonchan: 0, weezing: 0, rhydon: 0, chansey: 0,
+  tangela: 0, kangaskhan: 0, seadra: 0, seaking: 0,
+  starmie: 0, mrmime: 0, scyther: 0, jynx: 0,
+  electabuzz: 0, magmar: 0, pinsir: 0, tauros: 0,
+  gyarados: 0, lapras: 0, ditto: 0, vaporeon: 0,
+  jolteon: 0, flareon: 0, porygon: 0, omastar: 0,
+  kabutops: 0, aerodactyl: 1, snorlax: 0,
+  articuno: 0, zapdos: 0, moltres: 0,
+  dragonite: 0, mewtwo: 0, mew: 0
 };
 
-/* ===== MEGAS ===== */
+/* ===================== MEGAS (INALTERADO) ===================== */
 const MEGAS = {
   "charizard-megax": { nome: "Mega Charizard X", player: "Rafael" },
   "alakazam-mega": { nome: "Mega Alakazam", player: "" },
@@ -246,43 +180,39 @@ const MEGAS = {
   "beedrill-mega": { nome: "Mega Beedrill", player: "" }
 };
 
-/* ===== UTIL ===== */
-function formatName(name) {
-  return name
-    .replace("mrmime", "Mr. Mime")
-    .replace("farfetchd", "Farfetch'd")
-    .replace(/\b\w/g, l => l.toUpperCase());
-}
+/* ===================== ESPECIAIS (NOVO) ===================== */
+const ESPECIAIS = {
+  "crystal-onix": {
+    nome: "Crystal Ônix",
+    img: "https://i.imgur.com/7cJZ8kL.png"
+  }
+};
 
 /* CONTADORES */
-function updateCounters() {
-  const total = Object.keys(SHINYS).length;
-  const capturados = Object.values(SHINYS).filter(v => v > 0).length;
-  document.getElementById("shinyCount").textContent =
-    `✨ Shinys: ${capturados} / ${total} (${Math.floor(capturados / total * 100)}%)`;
-  document.getElementById("megaCount").textContent =
-    `🧬 Megas: ${Object.keys(MEGAS).length}`;
-}
+document.getElementById("shinyCount").textContent =
+  `✨ Shinys: ${Object.values(SHINYS).filter(v => v > 0).length} / ${Object.keys(SHINYS).length}`;
+
+document.getElementById("megaCount").textContent =
+  `🧬 Megas: ${Object.keys(MEGAS).length}`;
+
+document.getElementById("specialCount").textContent =
+  `💎 Especiais: ${Object.keys(ESPECIAIS).length}`;
 
 /* RENDER */
 const shinyDiv = document.getElementById("shinys");
 const megaDiv = document.getElementById("megas");
+const specialDiv = document.getElementById("specials");
 
 function renderShinys(filter="") {
   shinyDiv.innerHTML = "";
   for (const pkm in SHINYS) {
     if (!pkm.includes(filter)) continue;
-
-    const card = document.createElement("div");
-    card.className = "card";
-    if (SHINYS[pkm] > 0) card.classList.add("shiny");
-
-    card.innerHTML = `
-      <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${pkm}.gif">
-      <div class="name">${formatName(pkm)}</div>
-      <div class="stat">✨ Capturados: ${SHINYS[pkm]}</div>
-    `;
-    shinyDiv.appendChild(card);
+    shinyDiv.innerHTML += `
+      <div class="card ${SHINYS[pkm] > 0 ? "shiny" : ""}">
+        <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${pkm}.gif">
+        <div class="name">${pkm}</div>
+        <div class="stat">✨ Capturados: ${SHINYS[pkm]}</div>
+      </div>`;
   }
 }
 
@@ -290,33 +220,47 @@ function renderMegas(filter="") {
   megaDiv.innerHTML = "";
   for (const m in MEGAS) {
     if (!MEGAS[m].nome.toLowerCase().includes(filter)) continue;
+    megaDiv.innerHTML += `
+      <div class="card mega">
+        <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
+        <div class="name">${MEGAS[m].nome}</div>
+        <div class="stat">👤 Player: ${MEGAS[m].player || "-"}</div>
+      </div>`;
+  }
+}
 
-    const card = document.createElement("div");
-    card.className = "card mega";
-    card.innerHTML = `
-      <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
-      <div class="name">${MEGAS[m].nome}</div>
-      <div class="stat">👤 Player: ${MEGAS[m].player || "-"}</div>
-    `;
-    megaDiv.appendChild(card);
+function renderEspeciais(filter="") {
+  specialDiv.innerHTML = "";
+  for (const s in ESPECIAIS) {
+    if (!ESPECIAIS[s].nome.toLowerCase().includes(filter)) continue;
+    specialDiv.innerHTML += `
+      <div class="card special">
+        <img src="${ESPECIAIS[s].img}">
+        <div class="name">${ESPECIAIS[s].nome}</div>
+        <div class="stat">💎 Pokémon Especial</div>
+      </div>`;
   }
 }
 
 renderShinys();
 renderMegas();
-updateCounters();
+renderEspeciais();
 
 /* BUSCA */
 document.getElementById("search").addEventListener("input", e => {
   const v = e.target.value.toLowerCase();
   renderShinys(v);
   renderMegas(v);
+  renderEspeciais(v);
 });
 
 /* TOGGLE */
+let mode = 0;
 function toggle() {
-  shinyDiv.classList.toggle("hidden");
-  megaDiv.classList.toggle("hidden");
+  mode = (mode + 1) % 3;
+  shinyDiv.classList.toggle("hidden", mode !== 0);
+  megaDiv.classList.toggle("hidden", mode !== 1);
+  specialDiv.classList.toggle("hidden", mode !== 2);
 }
 </script>
 
