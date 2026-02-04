@@ -71,8 +71,9 @@
     .card {
       background: #020617;
       border-radius: 14px;
-      padding: 10px;
+      padding: 14px 10px 10px;
       text-align: center;
+      position: relative;
       transition: transform 0.2s, box-shadow 0.2s;
     }
 
@@ -85,9 +86,24 @@
       width: 96px;
     }
 
-    .card p {
-      font-size: 0.8rem;
-      opacity: 0.7;
+    .card strong {
+      display: block;
+      margin-top: 6px;
+    }
+
+    /* SLOT CAPTURADOS */
+    .slot {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: gold;
+      color: #020617;
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 3px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
     }
   </style>
 </head>
@@ -162,8 +178,8 @@
         : p.sprites.front_default;
 
       card.innerHTML = `
+        ${shinyMode ? '<div class="slot">Capturados</div>' : ''}
         <img src="${imgSrc}" loading="lazy">
-        <p>#${p.id}</p>
         <strong>${capitalize(p.name)}</strong>
       `;
 
