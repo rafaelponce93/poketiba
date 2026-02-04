@@ -102,7 +102,6 @@ button {
   font-weight: bold;
   margin-top: 8px;
   font-size: 18px;
-  text-transform: capitalize;
 }
 
 .stat {
@@ -145,6 +144,15 @@ button {
 <div id="megas" class="grid hidden"></div>
 
 <script>
+/* ===== FUNÇÃO NOME BONITO ===== */
+function formatName(name) {
+  return name
+    .replace("mrmime", "Mr. Mime")
+    .replace("farfetchd", "Farfetch'd")
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, l => l.toUpperCase());
+}
+
 /* ===== SHINYS ===== */
 const SHINYS = {
   venusaur: 0, charizard: 1, blastoise: 0, butterfree: 0, beedrill: 0,
@@ -185,20 +193,23 @@ const MEGAS = {
 };
 
 /* CONTADORES */
+const total = Object.keys(SHINYS).length;
+const capturados = Object.values(SHINYS).filter(v => v > 0).length;
+
 document.getElementById("shinyCount").textContent =
-  `✨ Shinys: ${Object.values(SHINYS).filter(v => v > 0).length} / ${Object.keys(SHINYS).length}`;
+  `✨ Shinys: ${capturados} / ${total} (${Math.floor(capturados / total * 100)}%)`;
 
 document.getElementById("megaCount").textContent =
   `🧬 Megas: ${Object.keys(MEGAS).length}`;
 
-/* RENDER SHINYS */
+/* RENDER */
 const shinyDiv = document.getElementById("shinys");
 const megaDiv = document.getElementById("megas");
 
 function renderShinys(filter="") {
   shinyDiv.innerHTML = "";
   for (const pkm in SHINYS) {
-    if (!pkm.includes(filter)) continue;
+    if (!pkm.toLowerCase().includes(filter)) continue;
 
     const card = document.createElement("div");
     card.className = "card";
@@ -206,14 +217,13 @@ function renderShinys(filter="") {
 
     card.innerHTML = `
       <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${pkm}.gif">
-      <div class="name">${pkm}</div>
-      <div class="stat">✨ Shinys capturados: ${SHINYS[pkm]}</div>
+      <div class="name">${formatName(pkm)}</div>
+      <div class="stat">${SHINYS[pkm] > 0 ? "✅ Capturado" : "❌ Não capturado"}</div>
     `;
     shinyDiv.appendChild(card);
   }
 }
 
-/* RENDER MEGAS */
 function renderMegas(filter="") {
   megaDiv.innerHTML = "";
   for (const m in MEGAS) {
