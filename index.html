@@ -5,46 +5,88 @@
 <title>Pokeclt – Shinys & Megas</title>
 
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  margin: 0;
-  padding: 15px;
+:root {
+  --bg: #0f172a;
+  --card: #ffffff;
+  --accent: #facc15;
+  --text: #111827;
 }
 
-h1 {
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #e5e7eb;
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #020617, #0f172a);
+  color: white;
+  padding: 25px 15px;
   text-align: center;
 }
 
+header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+header p {
+  margin-top: 5px;
+  color: #cbd5f5;
+}
+
+/* BOTÃO */
 button {
   display: block;
-  margin: 15px auto;
-  padding: 10px 20px;
+  margin: 20px auto;
+  padding: 12px 30px;
   font-size: 16px;
+  border: none;
+  border-radius: 30px;
+  background: var(--accent);
   cursor: pointer;
+  font-weight: bold;
+  transition: transform .2s, box-shadow .2s;
 }
 
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0,0,0,.25);
+}
+
+/* GRID */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 20px;
 }
 
+/* CARD */
 .card {
-  background: white;
-  border-radius: 12px;
-  padding: 10px;
+  background: var(--card);
+  border-radius: 16px;
+  padding: 15px;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  box-shadow: 0 6px 15px rgba(0,0,0,.15);
+  transition: transform .2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
 }
 
 .card img {
-  width: 120px;
+  width: 160px;
+  image-rendering: pixelated;
 }
 
 .name {
   font-weight: bold;
-  margin-top: 5px;
+  margin-top: 8px;
+  font-size: 18px;
+  text-transform: capitalize;
 }
 
 .stat {
@@ -60,7 +102,10 @@ button {
 
 <body>
 
-<h1>✨ Pokeclt – Shinys & Megas</h1>
+<header>
+  <h1>✨ Pokeclt</h1>
+  <p>Shinys & Megas — Atualização Oficial</p>
+</header>
 
 <button onclick="toggle()">Shinys 🔁 Megas</button>
 
@@ -68,96 +113,39 @@ button {
 <div id="megas" class="grid hidden"></div>
 
 <script>
-/* ======================
-   👉 EDITE OS SHINYS 👈
-   ====================== */
+/* ===== SHINYS ===== */
 const SHINYS = {
-  venusaur: 0,
-  charizard: 1,
-  blastoise: 0,
-  butterfree: 0,
-  beedrill: 0,
-  pidgeot: 0,
-  raticate: 0,
-  fearow: 0,
-  arbok: 0,
-  raichu: 0,
-  sandslash: 0,
-  nidoqueen: 0,
-  nidoking: 0,
-  clefable: 0,
-  ninetales: 0,
-  wigglytuff: 0,
-  golbat: 0,
-  vileplume: 0,
-  parasect: 0,
-  venomoth: 0,
-  dugtrio: 0,
-  persian: 0,
-  golduck: 0,
-  primeape: 0,
-  arcanine: 0,
-  poliwrath: 0,
-  alakazam: 0,
-  machamp: 0,
-  victreebel: 0,
-  tentacruel: 0,
-  golem: 0,
-  rapidash: 0,
-  slowbro: 0,
-  magneton: 0,
-  farfetchd: 0,
-  dodrio: 0,
-  dewgong: 0,
-  muk: 0,
-  cloyster: 0,
-  gengar: 0,
-  hypno: 0,
-  kingler: 0,
-  electrode: 0,
-  exeggutor: 0,
-  marowak: 0,
-  hitmonlee: 0,
-  hitmonchan: 0,
-  weezing: 0,
-  rhydon: 0,
-  chansey: 0,
-  tangela: 0,
-  kangaskhan: 0,
-  seadra: 0,
-  seaking: 0,
-  starmie: 0,
-  "mr-mime": 0,
-  scyther: 0,
-  jynx: 0,
-  electabuzz: 0,
-  magmar: 0,
-  pinsir: 0,
-  tauros: 0,
-  gyarados: 0,
-  lapras: 0,
-  ditto: 0,
-  vaporeon: 0,
-  jolteon: 0,
-  flareon: 0,
-  porygon: 0,
-  omastar: 0,
-  kabutops: 0,
-  aerodactyl: 1,
-  snorlax: 0,
-  articuno: 0,
-  zapdos: 0,
-  moltres: 0,
-  dragonite: 0,
-  mewtwo: 0,
-  mew: 0
+  venusaur: 0, charizard: 1, blastoise: 0,
+  butterfree: 0, beedrill: 0, pidgeot: 0,
+  raticate: 0, fearow: 0, arbok: 0,
+  raichu: 0, sandslash: 0, nidoqueen: 0,
+  nidoking: 0, clefable: 0, ninetales: 0,
+  wigglytuff: 0, golbat: 0, vileplume: 0,
+  parasect: 0, venomoth: 0, dugtrio: 0,
+  persian: 0, golduck: 0, primeape: 0,
+  arcanine: 0, poliwrath: 0, alakazam: 0,
+  machamp: 0, victreebel: 0, tentacruel: 0,
+  golem: 0, rapidash: 0, slowbro: 0,
+  magneton: 0, farfetchd: 0, dodrio: 0,
+  dewgong: 0, muk: 0, cloyster: 0,
+  gengar: 0, hypno: 0, kingler: 0,
+  electrode: 0, exeggutor: 0, marowak: 0,
+  hitmonlee: 0, hitmonchan: 0, weezing: 0,
+  rhydon: 0, chansey: 0, tangela: 0,
+  kangaskhan: 0, seadra: 0, seaking: 0,
+  starmie: 0, "mr-mime": 0, scyther: 0,
+  jynx: 0, electabuzz: 0, magmar: 0,
+  pinsir: 0, tauros: 0, gyarados: 0,
+  lapras: 0, ditto: 0, vaporeon: 0,
+  jolteon: 0, flareon: 0, porygon: 0,
+  omastar: 0, kabutops: 0, aerodactyl: 1,
+  snorlax: 0, articuno: 0, zapdos: 0,
+  moltres: 0, dragonite: 0, mewtwo: 0, mew: 0
 };
 
-/* ======================
-   👉 EDITE OS MEGAS 👈
-   ====================== */
+/* ===== MEGAS ===== */
 const MEGAS = {
-  "charizard-mega-x": { nome: "Charizard Mega X", player: "Rafael" },
+  "charizard-mega-x": { nome: "Mega Charizard X", player: "Rafael" },
   "alakazam-mega": { nome: "Mega Alakazam", player: "" },
   "gengar-mega": { nome: "Mega Gengar", player: "" },
   "gyarados-mega": { nome: "Mega Gyarados", player: "" },
@@ -170,11 +158,8 @@ const MEGAS = {
   "beedrill-mega": { nome: "Mega Beedrill", player: "" }
 };
 
-/* ======================
-   RENDER SHINYS
-   ====================== */
+/* RENDER SHINYS */
 const shinyDiv = document.getElementById("shinys");
-
 for (const pkm in SHINYS) {
   const card = document.createElement("div");
   card.className = "card";
@@ -190,15 +175,16 @@ for (const pkm in SHINYS) {
   stat.className = "stat";
   stat.textContent = `✨ Shinys capturados: ${SHINYS[pkm]}`;
 
+  if (SHINYS[pkm] > 0) {
+    card.style.border = "3px solid gold";
+  }
+
   card.append(img, name, stat);
   shinyDiv.appendChild(card);
 }
 
-/* ======================
-   RENDER MEGAS
-   ====================== */
+/* RENDER MEGAS */
 const megaDiv = document.getElementById("megas");
-
 for (const mega in MEGAS) {
   const card = document.createElement("div");
   card.className = "card";
@@ -218,9 +204,6 @@ for (const mega in MEGAS) {
   megaDiv.appendChild(card);
 }
 
-/* ======================
-   TOGGLE
-   ====================== */
 function toggle() {
   shinyDiv.classList.toggle("hidden");
   megaDiv.classList.toggle("hidden");
