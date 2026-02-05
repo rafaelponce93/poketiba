@@ -24,8 +24,15 @@ header {
   text-align: center;
 }
 
-header h1 { margin: 0; font-size: 36px; }
-header p { margin-top: 6px; color: #cbd5f5; }
+header h1 {
+  margin: 0;
+  font-size: 36px;
+}
+
+header p {
+  margin-top: 6px;
+  color: #cbd5f5;
+}
 
 .counters {
   display: flex;
@@ -110,12 +117,14 @@ button {
 .mega { border: 3px solid var(--mega); }
 .especial { border: 3px solid var(--especial); }
 
-/* 🔵 ÔNIX AZUL (CRYSTAL) */
+/* NÃO ALTERA COR */
 .crystal {
-  filter: hue-rotate(200deg) saturate(2);
+  filter: none;
 }
 
-.hidden { display: none; }
+.hidden {
+  display: none;
+}
 </style>
 </head>
 
@@ -203,7 +212,7 @@ especialCount.textContent =
 
 /* RENDER */
 function renderShinys(f="") {
-  shinys.innerHTML="";
+  shinys.innerHTML = "";
   for (const p in SHINYS) {
     if (!p.includes(f)) continue;
     shinys.innerHTML += `
@@ -216,7 +225,7 @@ function renderShinys(f="") {
 }
 
 function renderMegas(f="") {
-  megas.innerHTML="";
+  megas.innerHTML = "";
   for (const m in MEGAS) {
     if (!MEGAS[m].nome.toLowerCase().includes(f)) continue;
     megas.innerHTML += `
@@ -229,7 +238,7 @@ function renderMegas(f="") {
 }
 
 function renderEspeciais() {
-  especiais.innerHTML="";
+  especiais.innerHTML = "";
   for (const e in ESPECIAIS) {
     especiais.innerHTML += `
       <div class="card especial">
@@ -251,7 +260,7 @@ search.oninput = e => {
   renderMegas(v);
 };
 
-/* TOGGLES */
+/* BOTÕES */
 function showShinys(){shinys.classList.remove("hidden");megas.classList.add("hidden");especiais.classList.add("hidden")}
 function showMegas(){shinys.classList.add("hidden");megas.classList.remove("hidden");especiais.classList.add("hidden")}
 function showEspeciais(){shinys.classList.add("hidden");megas.classList.add("hidden");especiais.classList.remove("hidden")}
