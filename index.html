@@ -106,6 +106,14 @@ button {
   margin-top: 6px;
 }
 
+.player {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
 .shiny { border: 3px solid gold; }
 .mega { border: 3px solid var(--mega); }
 .especial { border: 3px solid var(--especial); }
@@ -169,17 +177,17 @@ const SHINYS = {
 };
 
 const MEGAS = {
-  "charizard-megax": { nome: "Mega Charizard X", player: "Orleans<br>Ricardinho" },
-  "alakazam-mega": { nome: "Mega Alakazam", player: "Fibonacci" },
-  "gengar-mega": { nome: "Mega Gengar", player: "Ben Folds" },
-  "gyarados-mega": { nome: "Mega Gyarados", player: "BRTKS<br>Rowsekorie" },
-  "kangaskhan-mega": { nome: "Mega Kangaskhan", player: "" },
-  "pinsir-mega": { nome: "Mega Pinsir", player: "Joyboy" },
-  "pidgeot-mega": { nome: "Mega Pidgeot", player: "Fibonacci" },
-  "aerodactyl-mega": { nome: "Mega Aerodactyl", player: "Joyboy<br>Fibonacci" },
-  "venusaur-mega": { nome: "Mega Venusaur", player: "Joyboy" },
-  "blastoise-mega": { nome: "Mega Blastoise", player: "Gamestc" },
-  "beedrill-mega": { nome: "Mega Beedrill", player: "" }
+  "charizard-megax": { nome: "Mega Charizard X", players: ["Orleans","Ricardinho"] },
+  "alakazam-mega": { nome: "Mega Alakazam", players: ["Fibonacci"] },
+  "gengar-mega": { nome: "Mega Gengar", players: ["Ben Folds"] },
+  "gyarados-mega": { nome: "Mega Gyarados", players: ["BRTKS","Rowsekorie"] },
+  "kangaskhan-mega": { nome: "Mega Kangaskhan", players: [] },
+  "pinsir-mega": { nome: "Mega Pinsir", players: ["Joyboy"] },
+  "pidgeot-mega": { nome: "Mega Pidgeot", players: ["Fibonacci"] },
+  "aerodactyl-mega": { nome: "Mega Aerodactyl", players: ["Joyboy","Fibonacci"] },
+  "venusaur-mega": { nome: "Mega Venusaur", players: ["Joyboy"] },
+  "blastoise-mega": { nome: "Mega Blastoise", players: ["Gamestc"] },
+  "beedrill-mega": { nome: "Mega Beedrill", players: [] }
 };
 
 const ESPECIAIS = {
@@ -197,10 +205,9 @@ megaCount.textContent =
 especialCount.textContent =
   `💎 Especiais: ${Object.keys(ESPECIAIS).length}`;
 
-function renderShinys(f="") {
+function renderShinys() {
   shinys.innerHTML="";
   for (const p in SHINYS) {
-    if (!p.includes(f)) continue;
     shinys.innerHTML += `
       <div class="card ${SHINYS[p]>0?'shiny':''}">
         <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${p}.gif">
@@ -210,40 +217,34 @@ function renderShinys(f="") {
   }
 }
 
-function renderMegas(f="") {
+function renderMegas() {
   megas.innerHTML="";
   for (const m in MEGAS) {
-    if (!MEGAS[m].nome.toLowerCase().includes(f)) continue;
+    const players = MEGAS[m].players.length
+      ? MEGAS[m].players.map(p=>`<div class="player">👤 ${p}</div>`).join("")
+      : `<div class="player">-</div>`;
+
     megas.innerHTML += `
       <div class="card mega">
         <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
         <div class="name">${MEGAS[m].nome}</div>
-        <div class="stat">👤 Player:<br>${MEGAS[m].player || "-"}</div>
+        ${players}
       </div>`;
   }
 }
 
 function renderEspeciais() {
-  especiais.innerHTML="";
-  for (const e in ESPECIAIS) {
-    especiais.innerHTML += `
-      <div class="card especial">
-        <img class="crystal" src="${ESPECIAIS[e].img}">
-        <div class="name">${ESPECIAIS[e].nome}</div>
-        <div class="stat">👤 Player: ${ESPECIAIS[e].player}</div>
-      </div>`;
-  }
+  especiais.innerHTML = `
+    <div class="card especial">
+      <img class="crystal" src="${ESPECIAIS.crystalonix.img}">
+      <div class="name">${ESPECIAIS.crystalonix.nome}</div>
+      <div class="player">👤 ${ESPECIAIS.crystalonix.player}</div>
+    </div>`;
 }
 
 renderShinys();
 renderMegas();
 renderEspeciais();
-
-search.oninput = e => {
-  const v = e.target.value.toLowerCase();
-  renderShinys(v);
-  renderMegas(v);
-};
 
 function showShinys(){shinys.classList.remove("hidden");megas.classList.add("hidden");especiais.classList.add("hidden")}
 function showMegas(){shinys.classList.add("hidden");megas.classList.remove("hidden");especiais.classList.add("hidden")}
