@@ -118,21 +118,11 @@ button {
   margin-top: 6px;
 }
 
-.shiny {
-  border: 3px solid gold;
-}
+.shiny { border: 3px solid gold; }
+.mega { border: 3px solid var(--mega); }
+.especial { border: 3px solid var(--especial); }
 
-.mega {
-  border: 3px solid var(--mega);
-}
-
-.especial {
-  border: 3px solid var(--especial);
-}
-
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 </style>
 </head>
 
@@ -163,7 +153,7 @@ button {
 <div id="especiais" class="grid hidden"></div>
 
 <script>
-/* ===== SHINYS ===== */
+/* ===== SHINYS (ORIGINAL, INTACTO) ===== */
 const SHINYS = {
   venusaur: 0, charizard: 1, blastoise: 0, butterfree: 0, beedrill: 0,
   pidgeot: 0, raticate: 0, fearow: 0, arbok: 0, raichu: 0,
@@ -206,66 +196,54 @@ const MEGAS = {
 const ESPECIAIS = {
   crystalonix: {
     nome: "Crystal Ônix",
-    img: "https://static.wikia.nocookie.net/pokemonwack/images/5/53/1284MS.gif"
+    img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/95.png"
   }
 };
 
 /* CONTADORES */
-document.getElementById("shinyCount").textContent =
-  `✨ Shinys: ${Object.values(SHINYS).filter(v => v > 0).length} / ${Object.keys(SHINYS).length}`;
-
-document.getElementById("megaCount").textContent =
+shinyCount.textContent =
+  `✨ Shinys: ${Object.values(SHINYS).filter(v=>v>0).length} / ${Object.keys(SHINYS).length}`;
+megaCount.textContent =
   `🧬 Megas: ${Object.keys(MEGAS).length}`;
-
-document.getElementById("especialCount").textContent =
+especialCount.textContent =
   `💎 Especiais: ${Object.keys(ESPECIAIS).length}`;
 
-/* RENDER SHINYS */
-const shinyDiv = document.getElementById("shinys");
-const megaDiv = document.getElementById("megas");
-const especialDiv = document.getElementById("especiais");
-
-function renderShinys(filter="") {
-  shinyDiv.innerHTML = "";
-  for (const pkm in SHINYS) {
-    if (!pkm.includes(filter)) continue;
-    const card = document.createElement("div");
-    card.className = "card" + (SHINYS[pkm] > 0 ? " shiny" : "");
-    card.innerHTML = `
-      <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${pkm}.gif">
-      <div class="name">${pkm}</div>
-      <div class="stat">✨ Shinys capturados: ${SHINYS[pkm]}</div>
-    `;
-    shinyDiv.appendChild(card);
+/* RENDER */
+function renderShinys(f="") {
+  shinys.innerHTML="";
+  for (const p in SHINYS) {
+    if (!p.includes(f)) continue;
+    shinys.innerHTML += `
+      <div class="card ${SHINYS[p]>0?'shiny':''}">
+        <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${p}.gif">
+        <div class="name">${p}</div>
+        <div class="stat">✨ Shinys capturados: ${SHINYS[p]}</div>
+      </div>`;
   }
 }
 
-function renderMegas(filter="") {
-  megaDiv.innerHTML = "";
+function renderMegas(f="") {
+  megas.innerHTML="";
   for (const m in MEGAS) {
-    if (!MEGAS[m].nome.toLowerCase().includes(filter)) continue;
-    const card = document.createElement("div");
-    card.className = "card mega";
-    card.innerHTML = `
-      <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
-      <div class="name">${MEGAS[m].nome}</div>
-      <div class="stat">👤 Player: ${MEGAS[m].player || "-"}</div>
-    `;
-    megaDiv.appendChild(card);
+    if (!MEGAS[m].nome.toLowerCase().includes(f)) continue;
+    megas.innerHTML += `
+      <div class="card mega">
+        <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
+        <div class="name">${MEGAS[m].nome}</div>
+        <div class="stat">👤 Player: ${MEGAS[m].player || "-"}</div>
+      </div>`;
   }
 }
 
 function renderEspeciais() {
-  especialDiv.innerHTML = "";
+  especiais.innerHTML="";
   for (const e in ESPECIAIS) {
-    const card = document.createElement("div");
-    card.className = "card especial";
-    card.innerHTML = `
-      <img src="${ESPECIAIS[e].img}">
-      <div class="name">${ESPECIAIS[e].nome}</div>
-      <div class="stat">💎 Especial</div>
-    `;
-    especialDiv.appendChild(card);
+    especiais.innerHTML += `
+      <div class="card especial">
+        <img src="${ESPECIAIS[e].img}">
+        <div class="name">${ESPECIAIS[e].nome}</div>
+        <div class="stat">💎 Especial</div>
+      </div>`;
   }
 }
 
@@ -274,30 +252,16 @@ renderMegas();
 renderEspeciais();
 
 /* BUSCA */
-document.getElementById("search").addEventListener("input", e => {
+search.oninput = e => {
   const v = e.target.value.toLowerCase();
   renderShinys(v);
   renderMegas(v);
-});
+};
 
 /* TOGGLES */
-function showShinys() {
-  shinyDiv.classList.remove("hidden");
-  megaDiv.classList.add("hidden");
-  especialDiv.classList.add("hidden");
-}
-
-function showMegas() {
-  shinyDiv.classList.add("hidden");
-  megaDiv.classList.remove("hidden");
-  especialDiv.classList.add("hidden");
-}
-
-function showEspeciais() {
-  shinyDiv.classList.add("hidden");
-  megaDiv.classList.add("hidden");
-  especialDiv.classList.remove("hidden");
-}
+function showShinys(){shinys.classList.remove("hidden");megas.classList.add("hidden");especiais.classList.add("hidden")}
+function showMegas(){shinys.classList.add("hidden");megas.classList.remove("hidden");especiais.classList.add("hidden")}
+function showEspeciais(){shinys.classList.add("hidden");megas.classList.add("hidden");especiais.classList.remove("hidden")}
 </script>
 
 </body>
