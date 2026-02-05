@@ -98,13 +98,16 @@ button {
   font-weight: bold;
   margin-top: 8px;
   font-size: 18px;
-  text-transform: capitalize;
 }
 
 .stat {
   font-size: 14px;
   margin-top: 6px;
 }
+
+.shiny { border: 3px solid gold; }
+.mega { border: 3px solid var(--mega); }
+.especial { border: 3px solid var(--especial); }
 
 .player {
   display: flex;
@@ -114,12 +117,8 @@ button {
   margin-top: 4px;
 }
 
-.shiny { border: 3px solid gold; }
-.mega { border: 3px solid var(--mega); }
-.especial { border: 3px solid var(--especial); }
-
-.crystal {
-  filter: hue-rotate(210deg) saturate(3) brightness(1.1) contrast(1.2);
+.player::before {
+  content: "👤";
 }
 
 .hidden { display: none; }
@@ -153,99 +152,100 @@ button {
 <div id="especiais" class="grid hidden"></div>
 
 <script>
+/* ===== SHINYS ===== */
 const SHINYS = {
-  venusaur: 6, charizard: 13, blastoise: 5, butterfree: 0, beedrill: 0,
-  pidgeot: 17, raticate: 0, fearow: 0, arbok: 0, raichu: 5,
-  sandslash: 4, nidoqueen: 0, nidoking: 0, clefable: 1,
-  ninetales: 1, wigglytuff: 1, golbat: 0, vileplume: 2,
-  parasect: 0, venomoth: 0, dugtrio: 1, persian: 0,
-  golduck: 0, primeape: 0, arcanine: 4, poliwrath: 4,
-  alakazam: 10, machamp: 8, victreebel: 3, tentacruel: 0,
-  golem: 8, rapidash: 0, slowbro: 0, magneton: 1,
-  farfetchd: 0, dodrio: 1, dewgong: 0, muk: 0,
-  cloyster: 0, gengar: 11, hypno: 0, kingler: 0,
-  electrode: 0, exeggutor: 2, marowak: 2, hitmonlee: 1,
-  hitmonchan: 0, weezing: 0, rhydon: 10, chansey: 1,
-  tangela: 0, kangaskhan: 2, seadra: 0, seaking: 0,
-  starmie: 0, mrmime: 0, scyther: 5, jynx: 10,
-  electabuzz: 11, magmar: 8, pinsir: 4, tauros: 0,
-  gyarados: 9, lapras: 1, ditto: 0, vaporeon: 2,
-  jolteon: 1, flareon: 0, porygon: 0, omastar: 0,
-  kabutops: 1, aerodactyl: 0, snorlax: 6,
-  articuno: 0, zapdos: 0, moltres: 0,
-  dragonite: 8, mewtwo: 0, mew: 0
+  venusaur:6,charizard:13,blastoise:5,butterfree:0,beedrill:0,
+  pidgeot:17,raticate:0,fearow:0,arbok:0,raichu:5,
+  sandslash:4,nidoqueen:0,nidoking:0,clefable:1,
+  ninetales:1,wigglytuff:1,golbat:0,vileplume:2,
+  parasect:0,venomoth:0,dugtrio:1,persian:0,
+  golduck:0,primeape:0,arcanine:4,poliwrath:4,
+  alakazam:10,machamp:8,victreebel:3,tentacruel:0,
+  golem:8,rapidash:0,slowbro:0,magneton:1,
+  farfetchd:0,dodrio:1,dewgong:0,muk:0,
+  cloyster:0,gengar:11,hypno:0,kingler:0,
+  electrode:0,exeggutor:2,marowak:2,hitmonlee:1,
+  hitmonchan:0,weezing:0,rhydon:10,chansey:1,
+  tangela:0,kangaskhan:2,seadra:0,seaking:0,
+  starmie:0,mrmime:0,scyther:5,jynx:10,
+  electabuzz:11,magmar:8,pinsir:4,tauros:0,
+  gyarados:9,lapras:1,ditto:0,vaporeon:2,
+  jolteon:1,flareon:0,porygon:0,omastar:0,
+  kabutops:1,aerodactyl:0,snorlax:6,
+  articuno:0,zapdos:0,moltres:0,
+  dragonite:8,mewtwo:0,mew:0
 };
 
+/* ===== MEGAS ===== */
 const MEGAS = {
-  "charizard-megax": { nome: "Mega Charizard X", players: ["Orleans","Ricardinho"] },
-  "alakazam-mega": { nome: "Mega Alakazam", players: ["Fibonacci"] },
-  "gengar-mega": { nome: "Mega Gengar", players: ["Ben Folds"] },
-  "gyarados-mega": { nome: "Mega Gyarados", players: ["BRTKS","Rowsekorie"] },
-  "kangaskhan-mega": { nome: "Mega Kangaskhan", players: [] },
-  "pinsir-mega": { nome: "Mega Pinsir", players: ["Joyboy"] },
-  "pidgeot-mega": { nome: "Mega Pidgeot", players: ["Fibonacci"] },
-  "aerodactyl-mega": { nome: "Mega Aerodactyl", players: ["Joyboy","Fibonacci"] },
-  "venusaur-mega": { nome: "Mega Venusaur", players: ["Joyboy"] },
-  "blastoise-mega": { nome: "Mega Blastoise", players: ["Gamestc"] },
-  "beedrill-mega": { nome: "Mega Beedrill", players: [] }
+  "charizard-megax": { nome:"Mega Charizard X", players:["Orleans","Ricardinho"] },
+  "alakazam-mega": { nome:"Mega Alakazam", players:["Fibonacci"] },
+  "gengar-mega": { nome:"Mega Gengar", players:["Ben Folds"] },
+  "gyarados-mega": { nome:"Mega Gyarados", players:["Ricardinho","Rowsekorie"] },
+  "pinsir-mega": { nome:"Mega Pinsir", players:["Joyboy"] },
+  "pidgeot-mega": { nome:"Mega Pidgeot", players:["Fibonacci"] },
+  "aerodactyl-mega": { nome:"Mega Aerodactyl", players:["Joyboy","Fibonacci"] },
+  "venusaur-mega": { nome:"Mega Venusaur", players:["Joyboy"] },
+  "blastoise-mega": { nome:"Mega Blastoise", players:["BRTKS"] }
 };
 
+/* ===== ESPECIAIS ===== */
 const ESPECIAIS = {
   crystalonix: {
-    nome: "Crystal Ônix",
-    player: "Joyboy",
-    img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/95.png"
+    nome:"Crystal Ônix",
+    player:"Joyboy",
+    img:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/95.png"
   }
 };
 
-shinyCount.textContent =
-  `✨ Shinys: ${Object.values(SHINYS).filter(v=>v>0).length} / ${Object.keys(SHINYS).length}`;
-megaCount.textContent =
-  `🧬 Megas: ${Object.keys(MEGAS).length}`;
-especialCount.textContent =
-  `💎 Especiais: ${Object.keys(ESPECIAIS).length}`;
+/* CONTADORES */
+shinyCount.textContent = `✨ Shinys: ${Object.values(SHINYS).filter(v=>v>0).length} / ${Object.keys(SHINYS).length}`;
+megaCount.textContent = `🧬 Megas: ${Object.keys(MEGAS).length}`;
+especialCount.textContent = `💎 Especiais: ${Object.keys(ESPECIAIS).length}`;
 
-function renderShinys() {
+/* RENDER */
+function renderShinys(f=""){
   shinys.innerHTML="";
-  for (const p in SHINYS) {
-    shinys.innerHTML += `
-      <div class="card ${SHINYS[p]>0?'shiny':''}">
-        <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${p}.gif">
-        <div class="name">${p}</div>
-        <div class="stat">✨ Shinys capturados: ${SHINYS[p]}</div>
-      </div>`;
-  }
-}
-
-function renderMegas() {
-  megas.innerHTML="";
-  for (const m in MEGAS) {
-    const players = MEGAS[m].players.length
-      ? MEGAS[m].players.map(p=>`<div class="player">👤 ${p}</div>`).join("")
-      : `<div class="player">-</div>`;
-
-    megas.innerHTML += `
-      <div class="card mega">
-        <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
-        <div class="name">${MEGAS[m].nome}</div>
-        ${players}
-      </div>`;
-  }
-}
-
-function renderEspeciais() {
-  especiais.innerHTML = `
-    <div class="card especial">
-      <img class="crystal" src="${ESPECIAIS.crystalonix.img}">
-      <div class="name">${ESPECIAIS.crystalonix.nome}</div>
-      <div class="player">👤 ${ESPECIAIS.crystalonix.player}</div>
+  for(const p in SHINYS){
+    if(!p.includes(f)) continue;
+    shinys.innerHTML+=`
+    <div class="card shiny">
+      <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${p}.gif">
+      <div class="name">${p}</div>
+      <div class="stat">✨ Shinys capturados: ${SHINYS[p]}</div>
     </div>`;
+  }
+}
+
+function renderMegas(){
+  megas.innerHTML="";
+  for(const m in MEGAS){
+    megas.innerHTML+=`
+    <div class="card mega">
+      <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
+      <div class="name">${MEGAS[m].nome}</div>
+      ${MEGAS[m].players.map(p=>`<div class="player">${p}</div>`).join("")}
+    </div>`;
+  }
+}
+
+function renderEspeciais(){
+  especiais.innerHTML="";
+  for(const e in ESPECIAIS){
+    especiais.innerHTML+=`
+    <div class="card especial">
+      <img src="${ESPECIAIS[e].img}">
+      <div class="name">${ESPECIAIS[e].nome}</div>
+      <div class="player">${ESPECIAIS[e].player}</div>
+    </div>`;
+  }
 }
 
 renderShinys();
 renderMegas();
 renderEspeciais();
 
+/* TOGGLES */
 function showShinys(){shinys.classList.remove("hidden");megas.classList.add("hidden");especiais.classList.add("hidden")}
 function showMegas(){shinys.classList.add("hidden");megas.classList.remove("hidden");especiais.classList.add("hidden")}
 function showEspeciais(){shinys.classList.add("hidden");megas.classList.add("hidden");especiais.classList.remove("hidden")}
