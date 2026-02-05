@@ -97,7 +97,6 @@ button {
 
 .card img {
   width: 160px;
-  image-rendering: pixelated;
 }
 
 .name {
@@ -135,9 +134,9 @@ button {
 
 <div class="controls">
   <input type="text" id="search" placeholder="🔍 Buscar Pokémon...">
-  <button onclick="show('shinys')">✨ Shinys</button>
-  <button onclick="show('megas')">🧬 Megas</button>
-  <button onclick="show('specials')">💎 Especiais</button>
+  <button onclick="showSection('shinys')">✨ Shinys</button>
+  <button onclick="showSection('megas')">🧬 Megas</button>
+  <button onclick="showSection('specials')">💎 Especiais</button>
 </div>
 
 <div id="shinys" class="grid"></div>
@@ -145,7 +144,7 @@ button {
 <div id="specials" class="grid hidden"></div>
 
 <script>
-/* ===== SHINYS (INALTERADO) ===== */
+/* ===== SHINYS (ORIGINAL – NÃO ALTERADO) ===== */
 const SHINYS = {
   venusaur: 0, charizard: 1, blastoise: 0, butterfree: 0, beedrill: 0,
   pidgeot: 0, raticate: 0, fearow: 0, arbok: 0, raichu: 0,
@@ -169,7 +168,7 @@ const SHINYS = {
   dragonite: 0, mewtwo: 0, mew: 0
 };
 
-/* ===== MEGAS (INALTERADO) ===== */
+/* ===== MEGAS (ORIGINAL) ===== */
 const MEGAS = {
   "charizard-megax": { nome: "Mega Charizard X", player: "Rafael" },
   "alakazam-mega": { nome: "Mega Alakazam", player: "" },
@@ -188,7 +187,7 @@ const MEGAS = {
 const ESPECIAIS = {
   crystalonix: {
     nome: "Crystal Ônix",
-    img: "https://wiki.pokexgames.com/images/CrystalOnix.gif"
+    img: "https://wiki.pokexgames.com/images/Crystal_Onix.png"
   }
 };
 
@@ -202,7 +201,7 @@ megaCount.textContent =
 specialCount.textContent =
   `💎 Especiais: ${Object.keys(ESPECIAIS).length}`;
 
-/* RENDERS */
+/* RENDER */
 function renderShinys(f="") {
   shinys.innerHTML="";
   for (const p in SHINYS) {
@@ -224,7 +223,7 @@ function renderMegas(f="") {
       <div class="card mega">
         <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
         <div class="name">${MEGAS[m].nome}</div>
-        <div class="stat">👤 Player: ${MEGAS[m].player||"-"}</div>
+        <div class="stat">👤 Player: ${MEGAS[m].player || "-"}</div>
       </div>`;
   }
 }
@@ -246,10 +245,12 @@ renderShinys(); renderMegas(); renderEspeciais();
 
 search.oninput = e => {
   const v = e.target.value.toLowerCase();
-  renderShinys(v); renderMegas(v); renderEspeciais(v);
+  renderShinys(v);
+  renderMegas(v);
+  renderEspeciais(v);
 };
 
-function show(id){
+function showSection(id) {
   shinys.classList.add("hidden");
   megas.classList.add("hidden");
   specials.classList.add("hidden");
