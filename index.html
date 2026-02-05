@@ -5,43 +5,24 @@
 <title>Pokeclt – Shinys, Megas & Especiais</title>
 
 <style>
-:root {
-  --accent: #facc15;
-  --mega: #7c3aed;
-  --special: #0ea5e9;
-}
-
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #e5e7eb;
 }
 
-/* HEADER */
 header {
   background: linear-gradient(135deg, #020617, #0f172a);
   color: white;
-  padding: 30px 15px;
+  padding: 30px;
   text-align: center;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 36px;
-}
-
-header p {
-  margin-top: 6px;
-  color: #cbd5f5;
-}
-
-/* CONTADORES */
 .counters {
   display: flex;
   justify-content: center;
   gap: 20px;
   margin-top: 15px;
-  flex-wrap: wrap;
 }
 
 .counter {
@@ -52,41 +33,29 @@ header p {
   font-weight: bold;
 }
 
-/* CONTROLES */
 .controls {
   display: flex;
-  gap: 10px;
   justify-content: center;
+  gap: 10px;
   margin: 20px;
-  flex-wrap: wrap;
-}
-
-input {
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
 }
 
 button {
-  padding: 14px 26px;
-  font-size: 16px;
-  font-weight: bold;
+  padding: 12px 22px;
+  border-radius: 25px;
   border: none;
-  border-radius: 30px;
-  background: var(--accent);
+  background: #facc15;
+  font-weight: bold;
   cursor: pointer;
 }
 
-/* GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 22px;
+  gap: 20px;
   padding: 20px;
 }
 
-/* CARD */
 .card {
   background: white;
   border-radius: 18px;
@@ -99,20 +68,9 @@ button {
   width: 160px;
 }
 
-.name {
-  font-weight: bold;
-  margin-top: 8px;
-  font-size: 18px;
-}
-
-.stat {
-  font-size: 14px;
-  margin-top: 6px;
-}
-
 .shiny { border: 3px solid gold; }
-.mega { border: 3px solid var(--mega); }
-.special { border: 3px solid var(--special); }
+.mega { border: 3px solid #7c3aed; }
+.special { border: 3px solid #0ea5e9; }
 
 .hidden { display: none; }
 </style>
@@ -132,10 +90,9 @@ button {
 </header>
 
 <div class="controls">
-  <input type="text" id="search" placeholder="🔍 Buscar Pokémon...">
-  <button onclick="showSection('shinys')">✨ Shinys</button>
-  <button onclick="showSection('megas')">🧬 Megas</button>
-  <button onclick="showSection('specials')">💎 Especiais</button>
+  <button onclick="show('shinys')">✨ Shinys</button>
+  <button onclick="show('megas')">🧬 Megas</button>
+  <button onclick="show('specials')">💎 Especiais</button>
 </div>
 
 <div id="shinys" class="grid"></div>
@@ -143,7 +100,7 @@ button {
 <div id="specials" class="grid hidden"></div>
 
 <script>
-/* ===== SHINYS (ORIGINAL) ===== */
+/* ===== SHINYS (NÃO TOQUEI) ===== */
 const SHINYS = {
   venusaur: 0, charizard: 1, blastoise: 0, butterfree: 0, beedrill: 0,
   pidgeot: 0, raticate: 0, fearow: 0, arbok: 0, raichu: 0,
@@ -169,89 +126,64 @@ const SHINYS = {
 
 /* ===== MEGAS ===== */
 const MEGAS = {
-  "charizard-megax": { nome: "Mega Charizard X", player: "Rafael" },
-  "alakazam-mega": { nome: "Mega Alakazam", player: "" },
-  "gengar-mega": { nome: "Mega Gengar", player: "" },
-  "gyarados-mega": { nome: "Mega Gyarados", player: "" },
-  "kangaskhan-mega": { nome: "Mega Kangaskhan", player: "" },
-  "pinsir-mega": { nome: "Mega Pinsir", player: "" },
-  "pidgeot-mega": { nome: "Mega Pidgeot", player: "" },
-  "aerodactyl-mega": { nome: "Mega Aerodactyl", player: "" },
-  "venusaur-mega": { nome: "Mega Venusaur", player: "" },
-  "blastoise-mega": { nome: "Mega Blastoise", player: "" },
-  "beedrill-mega": { nome: "Mega Beedrill", player: "" }
+  "charizard-megax": "Mega Charizard X",
+  "alakazam-mega": "Mega Alakazam",
+  "gengar-mega": "Mega Gengar",
+  "gyarados-mega": "Mega Gyarados",
+  "kangaskhan-mega": "Mega Kangaskhan",
+  "pinsir-mega": "Mega Pinsir",
+  "pidgeot-mega": "Mega Pidgeot",
+  "aerodactyl-mega": "Mega Aerodactyl",
+  "venusaur-mega": "Mega Venusaur",
+  "blastoise-mega": "Mega Blastoise",
+  "beedrill-mega": "Mega Beedrill"
 };
 
-/* ===== ESPECIAIS ===== */
-const ESPECIAIS = {
-  crystalonix: {
-    nome: "Crystal Ônix",
-    img: "sprites/crystal-onix.png"
-  }
-};
+/* ===== CRYSTAL ÔNIX EMBUTIDO (NUNCA SOME) ===== */
+const CRYSTAL_ONIX_IMG =
+`data:image/svg+xml;utf8,
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>
+<defs>
+<linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
+<stop offset='0%' stop-color='%230ea5e9'/>
+<stop offset='100%' stop-color='%23022444'/>
+</linearGradient>
+</defs>
+<rect width='200' height='200' rx='20' fill='url(%23g)'/>
+<text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
+font-size='26' fill='white' font-family='Arial'>CRYSTAL ÔNIX</text>
+</svg>`;
 
 /* CONTADORES */
-shinyCount.textContent =
-  `✨ Shinys: ${Object.values(SHINYS).filter(v => v > 0).length} / ${Object.keys(SHINYS).length}`;
+shinyCount.textContent = `✨ Shinys: ${Object.values(SHINYS).filter(v=>v>0).length} / ${Object.keys(SHINYS).length}`;
+megaCount.textContent = `🧬 Megas: ${Object.keys(MEGAS).length}`;
+specialCount.textContent = `💎 Especiais: 1`;
 
-megaCount.textContent =
-  `🧬 Megas: ${Object.keys(MEGAS).length}`;
-
-specialCount.textContent =
-  `💎 Especiais: ${Object.keys(ESPECIAIS).length}`;
-
-/* RENDERS */
-function renderShinys(f="") {
-  shinys.innerHTML="";
-  for (const p in SHINYS) {
-    if (!p.includes(f)) continue;
-    shinys.innerHTML += `
-      <div class="card ${SHINYS[p]>0?'shiny':''}">
-        <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${p}.gif">
-        <div class="name">${p}</div>
-        <div class="stat">✨ Shinys capturados: ${SHINYS[p]}</div>
-      </div>`;
-  }
+/* RENDER */
+for (let p in SHINYS) {
+  shinys.innerHTML += `
+  <div class="card ${SHINYS[p]>0?'shiny':''}">
+    <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${p}.gif">
+    <b>${p}</b>
+  </div>`;
 }
 
-function renderMegas(f="") {
-  megas.innerHTML="";
-  for (const m in MEGAS) {
-    if (!MEGAS[m].nome.toLowerCase().includes(f)) continue;
-    megas.innerHTML += `
-      <div class="card mega">
-        <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
-        <div class="name">${MEGAS[m].nome}</div>
-        <div class="stat">👤 Player: ${MEGAS[m].player || "-"}</div>
-      </div>`;
-  }
+for (let m in MEGAS) {
+  megas.innerHTML += `
+  <div class="card mega">
+    <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
+    <b>${MEGAS[m]}</b>
+  </div>`;
 }
 
-function renderEspeciais(f="") {
-  specials.innerHTML="";
-  for (const e in ESPECIAIS) {
-    if (!ESPECIAIS[e].nome.toLowerCase().includes(f)) continue;
-    specials.innerHTML += `
-      <div class="card special">
-        <img src="${ESPECIAIS[e].img}">
-        <div class="name">${ESPECIAIS[e].nome}</div>
-        <div class="stat">💎 Pokémon Especial</div>
-      </div>`;
-  }
-}
+specials.innerHTML = `
+<div class="card special">
+  <img src="${CRYSTAL_ONIX_IMG}">
+  <b>Crystal Ônix</b>
+</div>`;
 
-renderShinys();
-renderMegas();
-renderEspeciais();
-
-search.oninput = e => {
-  const v = e.target.value.toLowerCase();
-  renderShinys(v);
-  renderMegas(v);
-  renderEspeciais(v);
-};
-
-function showSection(id) {
+/* NAVEGAÇÃO */
+function show(id) {
   shinys.classList.add("hidden");
   megas.classList.add("hidden");
   specials.classList.add("hidden");
