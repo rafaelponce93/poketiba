@@ -119,14 +119,43 @@ button {
   border: 3px solid var(--mega);
 }
 
-/* CRYSTAL */
-.crystal {
-  filter: hue-rotate(190deg) saturate(1.6) brightness(1.2);
-}
-
+/* ===== CRYSTAL REAL ===== */
 .crystal-card {
   border: 3px solid var(--crystal);
-  box-shadow: 0 0 18px rgba(56,189,248,.8);
+  background: linear-gradient(145deg, #e0f2fe, #bae6fd);
+  box-shadow:
+    0 0 20px rgba(56,189,248,.9),
+    inset 0 0 12px rgba(255,255,255,.8);
+}
+
+.crystal {
+  filter:
+    hue-rotate(200deg)
+    saturate(2)
+    brightness(1.25)
+    contrast(1.1)
+    drop-shadow(0 0 10px rgba(56,189,248,.9));
+}
+
+/* efeito de brilho animado */
+.crystal-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(255,255,255,.6) 40%,
+    transparent 60%
+  );
+  animation: shine 3s infinite;
+  pointer-events: none;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .hidden {
@@ -158,7 +187,7 @@ button {
 <div id="especiais" class="grid hidden"></div>
 
 <script>
-/* ===== SHINYS (NÃO REMOVIDOS) ===== */
+/* ===== SHINYS ===== */
 const SHINYS = {
   venusaur: 0, charizard: 1, blastoise: 0, butterfree: 0, beedrill: 0,
   pidgeot: 0, raticate: 0, fearow: 0, arbok: 0, raichu: 0,
@@ -202,7 +231,7 @@ const ESPECIAIS = {
   crystalonix: {
     nome: "Crystal Ônix",
     img: "https://play.pokemonshowdown.com/sprites/ani/onix.gif",
-    player: "Rafael" // ← MUDE AQUI QUANDO QUISER
+    player: "Rafael"
   }
 };
 
@@ -221,52 +250,46 @@ const shinyDiv = document.getElementById("shinys");
 const megaDiv = document.getElementById("megas");
 const especiaisDiv = document.getElementById("especiais");
 
-/* RENDER SHINYS */
-function renderShinys(filter="") {
+/* RENDERS */
+function renderShinys(f="") {
   shinyDiv.innerHTML = "";
-  for (const pkm in SHINYS) {
-    if (!pkm.includes(filter)) continue;
-    const card = document.createElement("div");
-    card.className = "card";
-    if (SHINYS[pkm] > 0) card.classList.add("shiny");
-    card.innerHTML = `
-      <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${pkm}.gif">
-      <div class="name">${pkm}</div>
-      <div class="stat">✨ Shinys capturados: ${SHINYS[pkm]}</div>
-    `;
-    shinyDiv.appendChild(card);
+  for (const p in SHINYS) {
+    if (!p.includes(f)) continue;
+    const c = document.createElement("div");
+    c.className = "card" + (SHINYS[p] > 0 ? " shiny" : "");
+    c.innerHTML = `
+      <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${p}.gif">
+      <div class="name">${p}</div>
+      <div class="stat">✨ Shinys capturados: ${SHINYS[p]}</div>`;
+    shinyDiv.appendChild(c);
   }
 }
 
-/* RENDER MEGAS */
-function renderMegas(filter="") {
+function renderMegas(f="") {
   megaDiv.innerHTML = "";
   for (const m in MEGAS) {
-    if (!MEGAS[m].nome.toLowerCase().includes(filter)) continue;
-    const card = document.createElement("div");
-    card.className = "card mega";
-    card.innerHTML = `
+    if (!MEGAS[m].nome.toLowerCase().includes(f)) continue;
+    const c = document.createElement("div");
+    c.className = "card mega";
+    c.innerHTML = `
       <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
       <div class="name">${MEGAS[m].nome}</div>
-      <div class="stat">👤 Player: ${MEGAS[m].player || "-"}</div>
-    `;
-    megaDiv.appendChild(card);
+      <div class="stat">👤 Player: ${MEGAS[m].player || "-"}</div>`;
+    megaDiv.appendChild(c);
   }
 }
 
-/* RENDER ESPECIAIS */
-function renderEspeciais(filter="") {
+function renderEspeciais(f="") {
   especiaisDiv.innerHTML = "";
   for (const e in ESPECIAIS) {
-    if (!ESPECIAIS[e].nome.toLowerCase().includes(filter)) continue;
-    const card = document.createElement("div");
-    card.className = "card crystal-card";
-    card.innerHTML = `
+    if (!ESPECIAIS[e].nome.toLowerCase().includes(f)) continue;
+    const c = document.createElement("div");
+    c.className = "card crystal-card";
+    c.innerHTML = `
       <img class="crystal" src="${ESPECIAIS[e].img}">
       <div class="name">${ESPECIAIS[e].nome}</div>
-      <div class="stat">👤 Player: ${ESPECIAIS[e].player || "-"}</div>
-    `;
-    especiaisDiv.appendChild(card);
+      <div class="stat">👤 Player: ${ESPECIAIS[e].player || "-"}</div>`;
+    especiaisDiv.appendChild(c);
   }
 }
 
