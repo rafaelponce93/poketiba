@@ -103,7 +103,6 @@ button {
   font-weight: bold;
   margin-top: 8px;
   font-size: 18px;
-  text-transform: capitalize;
 }
 
 .stat {
@@ -144,7 +143,7 @@ button {
 <div id="specials" class="grid hidden"></div>
 
 <script>
-/* ===== SHINYS (ORIGINAL – NÃO ALTERADO) ===== */
+/* ===== SHINYS (ORIGINAL) ===== */
 const SHINYS = {
   venusaur: 0, charizard: 1, blastoise: 0, butterfree: 0, beedrill: 0,
   pidgeot: 0, raticate: 0, fearow: 0, arbok: 0, raichu: 0,
@@ -168,7 +167,7 @@ const SHINYS = {
   dragonite: 0, mewtwo: 0, mew: 0
 };
 
-/* ===== MEGAS (ORIGINAL) ===== */
+/* ===== MEGAS ===== */
 const MEGAS = {
   "charizard-megax": { nome: "Mega Charizard X", player: "Rafael" },
   "alakazam-mega": { nome: "Mega Alakazam", player: "" },
@@ -183,11 +182,11 @@ const MEGAS = {
   "beedrill-mega": { nome: "Mega Beedrill", player: "" }
 };
 
-/* ===== ESPECIAIS (NOVO) ===== */
+/* ===== ESPECIAIS ===== */
 const ESPECIAIS = {
   crystalonix: {
     nome: "Crystal Ônix",
-    img: "https://wiki.pokexgames.com/images/Crystal_Onix.png"
+    img: "sprites/crystal-onix.png"
   }
 };
 
@@ -201,7 +200,7 @@ megaCount.textContent =
 specialCount.textContent =
   `💎 Especiais: ${Object.keys(ESPECIAIS).length}`;
 
-/* RENDER */
+/* RENDERS */
 function renderShinys(f="") {
   shinys.innerHTML="";
   for (const p in SHINYS) {
@@ -241,7 +240,9 @@ function renderEspeciais(f="") {
   }
 }
 
-renderShinys(); renderMegas(); renderEspeciais();
+renderShinys();
+renderMegas();
+renderEspeciais();
 
 search.oninput = e => {
   const v = e.target.value.toLowerCase();
