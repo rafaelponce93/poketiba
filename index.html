@@ -118,9 +118,9 @@ button {
   border: 3px solid var(--mega);
 }
 
-/* CRYSTAL ÔNIX AZUL */
+/* 🔵 CRYSTAL ÔNIX AZUL */
 .crystal {
-  filter: hue-rotate(200deg) saturate(2) brightness(1);
+  filter: hue-rotate(200deg) saturate(2);
 }
 
 .hidden {
@@ -174,7 +174,7 @@ const SHINYS = {
   dragonite: 0, mewtwo: 0, mew: 0
 };
 
-/* ===== MEGAS (NÃO MEXIDO) ===== */
+/* ===== MEGAS (INALTERADO) ===== */
 const MEGAS = {
   "charizard-megax": { nome: "Mega Charizard X", player: "Rafael" },
   "alakazam-mega": { nome: "Mega Alakazam", player: "" },
@@ -203,7 +203,7 @@ const megaDiv = document.getElementById("megas");
 function renderShinys(filter="") {
   shinyDiv.innerHTML = "";
 
-  /* Crystal Ônix (AZUL) */
+  /* 💎 Crystal Ônix AZUL */
   const crystal = document.createElement("div");
   crystal.className = "card";
   crystal.innerHTML = `
