@@ -8,7 +8,7 @@
 :root {
   --accent: #facc15;
   --mega: #7c3aed;
-  --crystal: #38bdf8;
+  --crystal: #2563eb; /* azul forte */
 }
 
 body {
@@ -92,6 +92,7 @@ button {
   padding: 15px;
   text-align: center;
   box-shadow: 0 6px 15px rgba(0,0,0,.15);
+  position: relative;
 }
 
 .card img {
@@ -119,25 +120,24 @@ button {
   border: 3px solid var(--mega);
 }
 
-/* ===== CRYSTAL REAL ===== */
+/* ===== CRYSTAL AZUL ===== */
 .crystal-card {
   border: 3px solid var(--crystal);
-  background: linear-gradient(145deg, #e0f2fe, #bae6fd);
+  background: linear-gradient(145deg, #dbeafe, #bfdbfe);
   box-shadow:
-    0 0 20px rgba(56,189,248,.9),
+    0 0 25px rgba(37,99,235,.9),
     inset 0 0 12px rgba(255,255,255,.8);
 }
 
 .crystal {
   filter:
-    hue-rotate(200deg)
-    saturate(2)
-    brightness(1.25)
-    contrast(1.1)
-    drop-shadow(0 0 10px rgba(56,189,248,.9));
+    grayscale(1)
+    brightness(1.3)
+    contrast(1.15)
+    drop-shadow(0 0 12px rgba(37,99,235,1));
 }
 
-/* efeito de brilho animado */
+/* brilho animado */
 .crystal-card::after {
   content: "";
   position: absolute;
@@ -145,17 +145,17 @@ button {
   border-radius: 18px;
   background: linear-gradient(
     120deg,
-    transparent 20%,
-    rgba(255,255,255,.6) 40%,
-    transparent 60%
+    transparent 25%,
+    rgba(255,255,255,.7) 45%,
+    transparent 65%
   );
   animation: shine 3s infinite;
   pointer-events: none;
 }
 
 @keyframes shine {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  from { transform: translateX(-120%); }
+  to { transform: translateX(120%); }
 }
 
 .hidden {
@@ -213,17 +213,7 @@ const SHINYS = {
 
 /* ===== MEGAS ===== */
 const MEGAS = {
-  "charizard-megax": { nome: "Mega Charizard X", player: "Rafael" },
-  "alakazam-mega": { nome: "Mega Alakazam", player: "" },
-  "gengar-mega": { nome: "Mega Gengar", player: "" },
-  "gyarados-mega": { nome: "Mega Gyarados", player: "" },
-  "kangaskhan-mega": { nome: "Mega Kangaskhan", player: "" },
-  "pinsir-mega": { nome: "Mega Pinsir", player: "" },
-  "pidgeot-mega": { nome: "Mega Pidgeot", player: "" },
-  "aerodactyl-mega": { nome: "Mega Aerodactyl", player: "" },
-  "venusaur-mega": { nome: "Mega Venusaur", player: "" },
-  "blastoise-mega": { nome: "Mega Blastoise", player: "" },
-  "beedrill-mega": { nome: "Mega Beedrill", player: "" }
+  "charizard-megax": { nome: "Mega Charizard X", player: "Rafael" }
 };
 
 /* ===== ESPECIAIS ===== */
@@ -250,7 +240,7 @@ const shinyDiv = document.getElementById("shinys");
 const megaDiv = document.getElementById("megas");
 const especiaisDiv = document.getElementById("especiais");
 
-/* RENDERS */
+/* RENDER */
 function renderShinys(f="") {
   shinyDiv.innerHTML = "";
   for (const p in SHINYS) {
@@ -265,30 +255,28 @@ function renderShinys(f="") {
   }
 }
 
-function renderMegas(f="") {
+function renderMegas() {
   megaDiv.innerHTML = "";
   for (const m in MEGAS) {
-    if (!MEGAS[m].nome.toLowerCase().includes(f)) continue;
     const c = document.createElement("div");
     c.className = "card mega";
     c.innerHTML = `
       <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
       <div class="name">${MEGAS[m].nome}</div>
-      <div class="stat">👤 Player: ${MEGAS[m].player || "-"}</div>`;
+      <div class="stat">👤 Player: ${MEGAS[m].player}</div>`;
     megaDiv.appendChild(c);
   }
 }
 
-function renderEspeciais(f="") {
+function renderEspeciais() {
   especiaisDiv.innerHTML = "";
   for (const e in ESPECIAIS) {
-    if (!ESPECIAIS[e].nome.toLowerCase().includes(f)) continue;
     const c = document.createElement("div");
     c.className = "card crystal-card";
     c.innerHTML = `
       <img class="crystal" src="${ESPECIAIS[e].img}">
       <div class="name">${ESPECIAIS[e].nome}</div>
-      <div class="stat">👤 Player: ${ESPECIAIS[e].player || "-"}</div>`;
+      <div class="stat">👤 Player: ${ESPECIAIS[e].player}</div>`;
     especiaisDiv.appendChild(c);
   }
 }
@@ -296,14 +284,6 @@ function renderEspeciais(f="") {
 renderShinys();
 renderMegas();
 renderEspeciais();
-
-/* BUSCA */
-document.getElementById("search").addEventListener("input", e => {
-  const v = e.target.value.toLowerCase();
-  renderShinys(v);
-  renderMegas(v);
-  renderEspeciais(v);
-});
 
 /* TOGGLE */
 let mode = 0;
