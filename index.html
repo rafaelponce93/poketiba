@@ -2,12 +2,13 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Pokeclt – Shinys & Megas</title>
+<title>Pokeclt – Shinys, Megas & Especiais</title>
 
 <style>
 :root {
   --accent: #facc15;
   --mega: #7c3aed;
+  --especial: #06b6d4;
 }
 
 body {
@@ -16,7 +17,6 @@ body {
   background: #e5e7eb;
 }
 
-/* HEADER */
 header {
   background: linear-gradient(135deg, #020617, #0f172a);
   color: white;
@@ -24,17 +24,9 @@ header {
   text-align: center;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 36px;
-}
+header h1 { margin: 0; font-size: 36px; }
+header p { margin-top: 6px; color: #cbd5f5; }
 
-header p {
-  margin-top: 6px;
-  color: #cbd5f5;
-}
-
-/* CONTADORES */
 .counters {
   display: flex;
   justify-content: center;
@@ -51,7 +43,6 @@ header p {
   font-weight: bold;
 }
 
-/* CONTROLES */
 .controls {
   display: flex;
   flex-direction: column;
@@ -66,17 +57,23 @@ input {
   border: 1px solid #ccc;
 }
 
+.buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 button {
-  padding: 16px 40px;
-  font-size: 20px;
+  padding: 14px 28px;
+  font-size: 16px;
   font-weight: bold;
   border: none;
-  border-radius: 40px;
+  border-radius: 30px;
   background: var(--accent);
   cursor: pointer;
 }
 
-/* GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -84,7 +81,6 @@ button {
   padding: 20px;
 }
 
-/* CARD */
 .card {
   background: white;
   border-radius: 18px;
@@ -110,22 +106,20 @@ button {
   margin-top: 6px;
 }
 
-.shiny {
-  border: 3px solid gold;
-}
+.shiny { border: 3px solid gold; }
+.mega { border: 3px solid var(--mega); }
+.especial { border: 3px solid var(--especial); }
 
-.mega {
-  border: 3px solid var(--mega);
-}
-
-/* 🔵 CRYSTAL ÔNIX AZUL */
+/* 🔷 EFEITO CRYSTAL */
 .crystal {
-  filter: hue-rotate(200deg) saturate(2);
+  filter:
+    hue-rotate(180deg)
+    saturate(2)
+    brightness(1.2)
+    contrast(1.1);
 }
 
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 </style>
 </head>
 
@@ -133,21 +127,27 @@ button {
 
 <header>
   <h1>✨ Pokeclt</h1>
-  <p>Shinys & Megas — Atualização Oficial</p>
+  <p>Shinys, Megas & Especiais</p>
 
   <div class="counters">
     <div class="counter" id="shinyCount"></div>
     <div class="counter" id="megaCount"></div>
+    <div class="counter" id="especialCount"></div>
   </div>
 </header>
 
 <div class="controls">
   <input type="text" id="search" placeholder="🔍 Buscar Pokémon...">
-  <button onclick="toggle()">Shinys 🔁 Megas</button>
+  <div class="buttons">
+    <button onclick="showShinys()">Shinys</button>
+    <button onclick="showMegas()">Megas</button>
+    <button onclick="showEspeciais()">Especiais</button>
+  </div>
 </div>
 
 <div id="shinys" class="grid"></div>
 <div id="megas" class="grid hidden"></div>
+<div id="especiais" class="grid hidden"></div>
 
 <script>
 /* ===== SHINYS ===== */
@@ -174,7 +174,7 @@ const SHINYS = {
   dragonite: 0, mewtwo: 0, mew: 0
 };
 
-/* ===== MEGAS (INALTERADO) ===== */
+/* ===== MEGAS ===== */
 const MEGAS = {
   "charizard-megax": { nome: "Mega Charizard X", player: "Rafael" },
   "alakazam-mega": { nome: "Mega Alakazam", player: "" },
@@ -189,80 +189,76 @@ const MEGAS = {
   "beedrill-mega": { nome: "Mega Beedrill", player: "" }
 };
 
+/* ===== ESPECIAIS ===== */
+const ESPECIAIS = {
+  crystalonix: {
+    nome: "Crystal Ônix",
+    img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/95.png"
+  }
+};
+
 /* CONTADORES */
-document.getElementById("shinyCount").textContent =
-  `✨ Shinys: ${Object.values(SHINYS).filter(v => v > 0).length} / ${Object.keys(SHINYS).length}`;
-
-document.getElementById("megaCount").textContent =
+shinyCount.textContent =
+  `✨ Shinys: ${Object.values(SHINYS).filter(v=>v>0).length} / ${Object.keys(SHINYS).length}`;
+megaCount.textContent =
   `🧬 Megas: ${Object.keys(MEGAS).length}`;
+especialCount.textContent =
+  `💎 Especiais: ${Object.keys(ESPECIAIS).length}`;
 
-/* RENDER SHINYS */
-const shinyDiv = document.getElementById("shinys");
-const megaDiv = document.getElementById("megas");
-
-function renderShinys(filter="") {
-  shinyDiv.innerHTML = "";
-
-  /* 💎 Crystal Ônix AZUL */
-  const crystal = document.createElement("div");
-  crystal.className = "card";
-  crystal.innerHTML = `
-    <img src="https://play.pokemonshowdown.com/sprites/ani/onix.gif" class="crystal">
-    <div class="name">Crystal Ônix</div>
-    <div class="stat">💎 Especial</div>
-  `;
-  shinyDiv.appendChild(crystal);
-
-  for (const pkm in SHINYS) {
-    if (!pkm.includes(filter)) continue;
-
-    const card = document.createElement("div");
-    card.className = "card";
-    if (SHINYS[pkm] > 0) card.classList.add("shiny");
-
-    card.innerHTML = `
-      <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${pkm}.gif">
-      <div class="name">${pkm}</div>
-      <div class="stat">✨ Shinys capturados: ${SHINYS[pkm]}</div>
-    `;
-    shinyDiv.appendChild(card);
+/* RENDER */
+function renderShinys(f="") {
+  shinys.innerHTML="";
+  for (const p in SHINYS) {
+    if (!p.includes(f)) continue;
+    shinys.innerHTML += `
+      <div class="card ${SHINYS[p]>0?'shiny':''}">
+        <img src="https://play.pokemonshowdown.com/sprites/ani-shiny/${p}.gif">
+        <div class="name">${p}</div>
+        <div class="stat">✨ Shinys capturados: ${SHINYS[p]}</div>
+      </div>`;
   }
 }
 
-/* RENDER MEGAS */
-function renderMegas(filter="") {
-  megaDiv.innerHTML = "";
-
+function renderMegas(f="") {
+  megas.innerHTML="";
   for (const m in MEGAS) {
-    if (!MEGAS[m].nome.toLowerCase().includes(filter)) continue;
+    if (!MEGAS[m].nome.toLowerCase().includes(f)) continue;
+    megas.innerHTML += `
+      <div class="card mega">
+        <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
+        <div class="name">${MEGAS[m].nome}</div>
+        <div class="stat">👤 Player: ${MEGAS[m].player || "-"}</div>
+      </div>`;
+  }
+}
 
-    const card = document.createElement("div");
-    card.className = "card mega";
-
-    card.innerHTML = `
-      <img src="https://play.pokemonshowdown.com/sprites/ani/${m}.gif">
-      <div class="name">${MEGAS[m].nome}</div>
-      <div class="stat">👤 Player: ${MEGAS[m].player || "-"}</div>
-    `;
-    megaDiv.appendChild(card);
+function renderEspeciais() {
+  especiais.innerHTML="";
+  for (const e in ESPECIAIS) {
+    especiais.innerHTML += `
+      <div class="card especial">
+        <img class="crystal" src="${ESPECIAIS[e].img}">
+        <div class="name">${ESPECIAIS[e].nome}</div>
+        <div class="stat">💎 Especial</div>
+      </div>`;
   }
 }
 
 renderShinys();
 renderMegas();
+renderEspeciais();
 
 /* BUSCA */
-document.getElementById("search").addEventListener("input", e => {
+search.oninput = e => {
   const v = e.target.value.toLowerCase();
   renderShinys(v);
   renderMegas(v);
-});
+};
 
-/* TOGGLE */
-function toggle() {
-  shinyDiv.classList.toggle("hidden");
-  megaDiv.classList.toggle("hidden");
-}
+/* TOGGLES */
+function showShinys(){shinys.classList.remove("hidden");megas.classList.add("hidden");especiais.classList.add("hidden")}
+function showMegas(){shinys.classList.add("hidden");megas.classList.remove("hidden");especiais.classList.add("hidden")}
+function showEspeciais(){shinys.classList.add("hidden");megas.classList.add("hidden");especiais.classList.remove("hidden")}
 </script>
 
 </body>
