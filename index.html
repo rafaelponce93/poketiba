@@ -110,11 +110,11 @@ button {
 .mega { border: 3px solid var(--mega); }
 .especial { border: 3px solid var(--especial); }
 
-/* 🔵 CRYSTAL ÔNIX AZUL ESCURO (SEM QUEBRAR NADA) */
+/* 🔵 CRYSTAL ÔNIX AZUL */
 .crystal {
   filter:
-    hue-rotate(200deg)
-    saturate(2.5)
+    hue-rotate(210deg)
+    saturate(3)
     brightness(1.1)
     contrast(1.2);
 }
@@ -193,7 +193,8 @@ const MEGAS = {
 const ESPECIAIS = {
   crystalonix: {
     nome: "Crystal Ônix",
-    img: "https://play.pokemonshowdown.com/sprites/ani/onix.gif"
+    player: "",  // 👈 COLOQUE O NOME AQUI
+    img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/95.png"
   }
 };
 
@@ -239,7 +240,7 @@ function renderEspeciais() {
       <div class="card especial">
         <img class="crystal" src="${ESPECIAIS[e].img}">
         <div class="name">${ESPECIAIS[e].nome}</div>
-        <div class="stat">💎 Especial</div>
+        <div class="stat">👤 Player: ${ESPECIAIS[e].player || "-"}</div>
       </div>`;
   }
 }
@@ -255,7 +256,7 @@ search.oninput = e => {
   renderMegas(v);
 };
 
-/* BOTÕES */
+/* TOGGLES */
 function showShinys(){shinys.classList.remove("hidden");megas.classList.add("hidden");especiais.classList.add("hidden")}
 function showMegas(){shinys.classList.add("hidden");megas.classList.remove("hidden");especiais.classList.add("hidden")}
 function showEspeciais(){shinys.classList.add("hidden");megas.classList.add("hidden");especiais.classList.remove("hidden")}
