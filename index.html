@@ -24,15 +24,8 @@ header {
   text-align: center;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 36px;
-}
-
-header p {
-  margin-top: 6px;
-  color: #cbd5f5;
-}
+header h1 { margin: 0; font-size: 36px; }
+header p { margin-top: 6px; color: #cbd5f5; }
 
 .counters {
   display: flex;
@@ -117,14 +110,16 @@ button {
 .mega { border: 3px solid var(--mega); }
 .especial { border: 3px solid var(--especial); }
 
-/* NÃO ALTERA COR */
+/* 🔵 CRYSTAL ÔNIX AZUL ESCURO (SEM QUEBRAR NADA) */
 .crystal {
-  filter: none;
+  filter:
+    hue-rotate(200deg)
+    saturate(2.5)
+    brightness(1.1)
+    contrast(1.2);
 }
 
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 </style>
 </head>
 
@@ -212,7 +207,7 @@ especialCount.textContent =
 
 /* RENDER */
 function renderShinys(f="") {
-  shinys.innerHTML = "";
+  shinys.innerHTML="";
   for (const p in SHINYS) {
     if (!p.includes(f)) continue;
     shinys.innerHTML += `
@@ -225,7 +220,7 @@ function renderShinys(f="") {
 }
 
 function renderMegas(f="") {
-  megas.innerHTML = "";
+  megas.innerHTML="";
   for (const m in MEGAS) {
     if (!MEGAS[m].nome.toLowerCase().includes(f)) continue;
     megas.innerHTML += `
@@ -238,7 +233,7 @@ function renderMegas(f="") {
 }
 
 function renderEspeciais() {
-  especiais.innerHTML = "";
+  especiais.innerHTML="";
   for (const e in ESPECIAIS) {
     especiais.innerHTML += `
       <div class="card especial">
